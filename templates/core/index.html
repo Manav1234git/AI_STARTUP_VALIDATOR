@@ -1,12 +1,822 @@
-<h1>AI Startup Validator</h1>
+<!DOCTYPE html>
+<html lang="en" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ValidatorAI | Advanced Startup Idea Validation Engine</title>
+    <meta name="description" content="An advanced startup idea validator that uses business intelligence, competitor weakness detection, and risk prediction to validate your next big idea.">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script src="language.js"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Outfit', 'sans-serif'],
+                    },
+                    colors: {
+                        brand: {
+                            400: '#38bdf8', // Light blue
+                            500: '#0ea5e9', // Primary blue
+                            600: '#0284c7', // Darker blue
+                            accent: '#8b5cf6', // Purple accent
+                            glow: '#05b7ff', // Bright glow blue
+                        },
+                        dark: {
+                            900: '#030305',
+                            800: '#0a0a0f',
+                            700: '#121216',
+                            600: '#1b1b22'
+                        }
+                    },
+                    animation: {
+                        'blob': 'blob 10s infinite',
+                        'blob-reverse': 'blob-reverse 12s infinite',
+                        'gradient-xy': 'gradient-xy 15s ease infinite',
+                        'grid-slide': 'grid-slide 20s linear infinite',
+                    },
+                    keyframes: {
+                        blob: {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(40px, -60px) scale(1.2)' },
+                            '66%': { transform: 'translate(-30px, 30px) scale(0.9)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        'blob-reverse': {
+                            '0%': { transform: 'translate(0px, 0px) scale(1)' },
+                            '33%': { transform: 'translate(-50px, 40px) scale(1.1)' },
+                            '66%': { transform: 'translate(30px, -30px) scale(0.8)' },
+                            '100%': { transform: 'translate(0px, 0px) scale(1)' },
+                        },
+                        'gradient-xy': {
+                            '0%, 100%': {
+                                'background-size': '400% 400%',
+                                'background-position': 'left center'
+                            },
+                            '50%': {
+                                'background-size': '200% 200%',
+                                'background-position': 'right center'
+                            }
+                        },
+                        'grid-slide': {
+                            '0%': { transform: 'translateY(0)' },
+                            '100%': { transform: 'translateY(50px)' }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        
+        body {
+            background-color: transparent;
+            color: #f8fafc;
+            overflow-x: hidden;
+        }
 
-<form method="POST" action="/validate/">
-    {% csrf_token %}
-    
-    <input type="text" name="idea" placeholder="Enter your startup idea" required>
-    <input type="text" name="audience" placeholder="Target audience" required>
-    
-    <textarea name="problem" placeholder="Problem you are solving"></textarea>
+        /* Animated Mesh Background */
+        .animated-mesh-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            z-index: -3;
+            background: linear-gradient(-45deg, #4f46e5, #7c3aed, #ec4899, #4f46e5);
+            background-size: 400% 400%;
+            animation: gradient-xy 15s ease infinite;
+        }
 
-    <button type="submit">Validate Idea</button>
-</form>
+        /* Moving Grid Effect */
+        .grid-overlay {
+            position: fixed;
+            inset: -100px;
+            z-index: -2;
+            background-size: 50px 50px;
+            background-image: 
+                linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+            mask-image: radial-gradient(circle at center, black 10%, transparent 60%);
+            -webkit-mask-image: radial-gradient(circle at center, black 10%, transparent 60%);
+            animation: grid-slide 20s linear infinite;
+            pointer-events: none;
+        }
+
+        .glass-nav {
+            background: rgba(3, 3, 5, 0.4);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+        }
+        .glass-card {
+            background: linear-gradient(160deg, rgba(23, 23, 26, 0.6) 0%, rgba(10, 10, 15, 0.7) 100%);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        .glass-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(56, 189, 248, 0.5);
+            box-shadow: 0 20px 40px -10px rgba(56, 189, 248, 0.2);
+            background: linear-gradient(160deg, rgba(30, 30, 35, 0.7) 0%, rgba(15, 15, 20, 0.8) 100%);
+        }
+        .text-glow {
+            text-shadow: 0 0 20px rgba(56, 189, 248, 0.6);
+        }
+        .text-gradient {
+            background: linear-gradient(135deg, #fff 0%, #94a3b8 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .text-gradient-brand {
+            background: linear-gradient(135deg, #38bdf8 0%, #8b5cf6 100%);
+            background-clip: text;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, #0ea5e9 0%, #0284c7 100%);
+            box-shadow: 0 0 20px rgba(14, 165, 233, 0.3);
+            transition: all 0.3s ease;
+        }
+        .btn-primary:hover {
+            box-shadow: 0 0 30px rgba(14, 165, 233, 0.6);
+            transform: translateY(-2px);
+        }
+        .icon-box {
+            background: linear-gradient(135deg, rgba(56, 189, 248, 0.15) 0%, rgba(139, 92, 246, 0.15) 100%);
+            border: 1px solid rgba(14, 165, 233, 0.25);
+        }
+
+        /* Ambient Glowing Orbs */
+        .orb {
+            position: absolute;
+            border-radius: 50%;
+            filter: blur(80px);
+            mix-blend-mode: screen;
+            z-index: -1;
+            pointer-events: none;
+        }
+        .orb-1 {
+            top: 10%;
+            left: 20%;
+            width: 500px;
+            height: 500px;
+            background: radial-gradient(circle, rgba(14,165,233,0.3) 0%, rgba(14,165,233,0) 70%);
+            animation: blob 10s infinite;
+        }
+        .orb-2 {
+            top: 30%;
+            right: 15%;
+            width: 400px;
+            height: 400px;
+            background: radial-gradient(circle, rgba(139,92,246,0.25) 0%, rgba(139,92,246,0) 70%);
+            animation: blob-reverse 12s infinite;
+        }
+        .orb-3 {
+            bottom: -10%;
+            left: 30%;
+            width: 600px;
+            height: 600px;
+            background: radial-gradient(circle, rgba(2,132,199,0.3) 0%, rgba(2,132,199,0) 70%);
+            animation: blob 15s infinite;
+        }
+        
+    </style>
+</head>
+<body class="antialiased font-sans selection:bg-brand-500 selection:text-white">
+
+    <!-- Deep Animated Background Setup -->
+    <div class="animated-mesh-bg"></div>
+    <div class="grid-overlay"></div>
+    
+    <!-- Floating Glowing Orbs -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-[-1]">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+        <div class="orb orb-3"></div>
+    </div>
+
+    <!-- Navigation -->
+    <nav class="fixed w-full z-50 glass-nav transition-all duration-300">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo -->
+                <div class="flex-shrink-0 cursor-pointer">
+                    <span class="text-2xl font-bold tracking-tighter text-white flex items-center gap-2">
+                        <svg class="w-8 h-8 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Validator<span class="text-gradient-brand">AI</span>
+                    </span>
+                </div>
+                <!-- Desktop Menu -->
+                <div class="hidden md:block">
+                    <div class="flex items-center space-x-8">
+                        <div class="flex items-center space-x-8">
+                    <a href="#features" data-key="platform" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Platform</a>
+
+                    <a href="#how-it-works" data-key="methodology" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Methodology</a>
+
+                    <a href="#comparison" data-key="why_us" class="text-sm font-medium text-gray-300 hover:text-white transition-colors">Why Us</a>
+
+                    </div>
+                </div>
+                        
+                </div>
+                <!-- Actions -->
+                <div class="hidden md:flex items-center space-x-3">
+                    <!-- Language Selector (Hover to open) -->
+                    <div class="relative group pt-4 pb-4 -my-4">
+                        <button class="inline-flex items-center px-3 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all outline-none">
+                            <svg class="w-5 h-5 mr-1.5 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129" />
+                            </svg>
+                            EN
+                            <svg class="w-4 h-4 ml-1 opacity-50 transition-transform group-hover:rotate-180" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+                            </svg>
+                        </button>
+                        <!-- Dropdown Menu -->
+                         <div class="absolute right-0 top-full mt-0 w-44 rounded-xl glass-card opacity-0 invisible group-hover:opacity-100 group-hover:visible transition-all duration-300 transform origin-top-right scale-95 group-hover:scale-100 border border-white/10 shadow-2xl py-2 overflow-hidden">
+                          <!-- <span id="current-lang">EN</span> -->
+                           <a href="#" onclick="changeLanguage('en')" class="block px-4 py-2">English</a>
+
+                            <a href="#" onclick="changeLanguage('es')" class="block px-4 py-2">Spanish</a>
+
+                            <a href="#" onclick="changeLanguage('fr')" class="block px-4 py-2">Français</a>
+
+                            <a href="#" onclick="changeLanguage('hi')" class="block px-4 py-2">हिन्दी</a>
+                        
+                        </div>
+                    </div>
+
+                    <!-- Contact -->
+                    <a href="#contact" data-key="contact" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        Contact Us
+                    </a>
+
+                    <a href="#signin"  data-key="sign_in" class="inline-flex items-center px-6 py-2.5 rounded-full text-sm font-medium text-white bg-white/5 border border-white/10 hover:bg-white/10 backdrop-blur-md transition-all">
+                       Sign In
+                    </a>
+
+                  
+                    <a href="#ai_tools_uses"  data-key="ai_tools_uses" class="inline-flex items-center px-4 py-2 rounded-lg text-sm font-medium text-gray-300 hover:text-white hover:bg-white/5 transition-all">
+                        AI Tools uses
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="relative pt-32 pb-20 lg:pt-48 lg:pb-32 flex flex-col items-center justify-center min-h-[90vh]">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center relative z-10">
+            <!-- Badge -->
+            <div class="inline-flex items-center gap-2 px-4 py-2 rounded-full border border-brand-500/30 bg-dark-900/50 backdrop-blur-md mb-8">
+                <span class="flex h-2 w-2 rounded-full bg-brand-400 text-glow animate-pulse"></span>
+                <span class="text-xs font-semibold tracking-wide text-brand-400 uppercase">Engine version 3.0 Live</span>
+            </div>
+            
+            <!-- Headline -->
+            <h1 data-key="hero_title" class="text-5xl lg:text-7xl font-extrabold tracking-tight mb-6 leading-[1.1]">
+            Stop Guessing. <br class="hidden lg:block">
+            <span class="text-gradient">Start with</span> 
+            <span class="text-gradient-brand text-glow">AI validator.</span>
+            </h1>
+            
+            <!-- Subheadline -->
+            <p data-key="hero_subtitle" class="mt-6 text-lg lg:text-xl text-gray-300 max-w-3xl mx-auto font-light leading-relaxed">
+              Discover AI-validated startup ideas 
+            </p>
+            
+            <!-- Input & CTA -->
+            <div class="mt-12 max-w-2xl mx-auto">
+                <div class="glass-card flex flex-col sm:flex-row p-2 rounded-2xl gap-2 relative group overflow-hidden">
+                    <div class="absolute inset-0 bg-gradient-to-r from-brand-500/20 to-brand-accent/20 opacity-0 group-hover:opacity-100 transition-opacity duration-500"></div>
+                    <input type="text" placeholder="Describe your startup idea in a few sentences..." 
+                    class="relative z-10 flex-1 bg-transparent border-0 text-white px-6 py-4 focus:ring-0 placeholder-gray-400 w-full outline-none text-lg">
+                    <button data-key="run_btn" class="relative z-10 btn-primary px-8 py-4 rounded-xl font-bold text-white flex items-center justify-center gap-2 w-full sm:w-auto">
+
+                        Run Diagnostics
+                        <svg class="w-5 h-5 group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                        </svg>
+                    </button>
+                </div>
+                <p class="mt-4 text-sm text-gray-400 font-medium tracking-wide">Trusted by 10,000+ technical founders • 98% prediction accuracy</p>
+            </div>
+        </div>
+    
+
+        <!-- Your original box -->
+        <div class="flex flex-col md:flex-row w-full max-w-3xl gap-4 bg-white/10 p-4 rounded-2xl backdrop-blur-md border border-white/20">
+
+            <select data-key="startup_type" class="p-4 rounded-xl text-gray-700 bg-white focus:outline-none focus:ring-2 focus:ring-purple-400 cursor-pointer text-lg font-medium border-r-8 border-transparent">
+
+                <option disabled selected>Startup Type</option>
+                <option>SaaS</option>
+                <option>AI Startup</option>
+                <option>E-commerce</option>
+                <option>FinTech</option>
+                <option>EdTech</option>
+                <option>HealthTech</option>
+                <option>Social Startup</option>
+            </select>
+
+            <button data-key="validate_btn2" class="bg-white text-indigo-600 hover:bg-indigo-50 px-8 py-4 rounded-xl font-bold text-lg transition-all duration-300 shadow-xl flex items-center justify-center gap-2 group whitespace-nowrap">
+
+                Validate Idea
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 transform group-hover:translate-x-1 transition-transform" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+                </svg>
+            </button>
+
+        </div>
+
+        <!-- Dashboard UI Preview Mockup -->
+        <div class="mt-24 w-full max-w-6xl mx-auto px-6 relative z-10 group perspective-1000">
+            <div class="glass-card rounded-2xl border border-white/10 p-4 pb-0 overflow-hidden relative shadow-2xl transition-transform duration-700 transform hover:rotate-x-2">
+                <div class="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-brand-500 to-brand-accent"></div>
+                <!-- Mockup Header -->
+                <div class="flex items-center justify-between mb-4 px-2 pt-2">
+                    <div class="flex items-center gap-2">
+                        <div class="w-3 h-3 rounded-full bg-red-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-yellow-500/80"></div>
+                        <div class="w-3 h-3 rounded-full bg-green-500/80"></div>
+                    </div>
+                    <div class="text-xs text-brand-400 font-mono tracking-widest uppercase opacity-70">Diagnostic Scan Complete</div>
+                </div>
+
+                <!-- Mockup Body -->
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 opacity-70 group-hover:opacity-100 transition-opacity duration-700">
+                    <div class="bg-dark-900/60 rounded-t-xl border border-white/5 p-6 backdrop-blur-md">
+                        <div class="text-sm text-gray-400 mb-2 uppercase tracking-wide">Feasibility Score</div>
+                        <div class="text-5xl font-extrabold text-green-400 mb-4 text-shadow-sm">84<span class="text-2xl text-gray-500">/100</span></div>
+                        <div class="space-y-3">
+                            <div class="h-1.5 bg-dark-700 rounded-full w-full overflow-hidden">
+                                <div class="h-1.5 bg-green-500 rounded-full relative" style="width: 84%">
+                                    <div class="absolute top-0 right-0 bottom-0 w-10 bg-gradient-to-r from-transparent to-white/50 opacity-50"></div>
+                                </div>
+                            </div>
+                            <div class="text-xs text-gray-400 flex justify-between font-medium"><span>Market Readiness</span> <span class="text-green-400 font-bold">High</span></div>
+                        </div>
+                    </div>
+                    <div class="bg-dark-900/60 rounded-t-xl border border-white/5 p-6 backdrop-blur-md">
+                        <div class="text-sm text-gray-400 mb-4 uppercase tracking-wide">Risk Matrix</div>
+                        <div class="space-y-4">
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300 font-medium">Execution Risk</span><span class="text-xs px-2.5 py-1 rounded bg-yellow-500/10 border border-yellow-500/20 text-yellow-400 font-bold tracking-wide">Moderate</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300 font-medium">Tech Risk</span><span class="text-xs px-2.5 py-1 rounded bg-green-500/10 border border-green-500/20 text-green-400 font-bold tracking-wide">Low</span></div>
+                            <div class="flex items-center justify-between"><span class="text-sm text-gray-300 font-medium">Market Risk</span><span class="text-xs px-2.5 py-1 rounded bg-red-500/10 border border-red-500/20 text-red-400 font-bold tracking-wide">High</span></div>
+                        </div>
+                    </div>
+                    <div class="bg-dark-900/60 rounded-t-xl border border-white/5 p-6 backdrop-blur-md">
+                        <div class="text-sm text-gray-400 mb-4 uppercase tracking-wide">Competitor Gaps</div>
+                        <ul class="space-y-4">
+                            <li class="flex items-start gap-3 text-sm">
+                                <span class="bg-brand-500/20 text-brand-400 p-1 rounded-md mt-0.5"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></span>
+                                <span class="text-gray-300">Pricing opacity in existing market leaders</span>
+                            </li>
+                            <li class="flex items-start gap-3 text-sm">
+                                <span class="bg-brand-500/20 text-brand-400 p-1 rounded-md mt-0.5"><svg class="w-3 h-3" fill="currentColor" viewBox="0 0 20 20"><path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/></svg></span>
+                                <span class="text-gray-300">Outdated mobile UX forcing churn</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Why Distinct (Not Just AI) Section -->
+    <section id="features" class="py-32 relative z-10 border-t border-white/5 bg-dark-900/40 backdrop-blur-sm">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center max-w-3xl mx-auto mb-20">
+                <h2 data-key="features_title" class="text-3xl md:text-5xl font-bold mb-6">
+                Beyond Basic Prompts.
+                <br class="hidden md:block"> Enter <span class="text-gradient-brand">Deep Validation.</span></h2>
+                <p class="text-gray-400 text-lg sm:text-xl font-light">We don't just tell you your idea is "good." We stress-test it against real-world economics, consumer psychology, and market dynamics.</p>
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
+                <!-- Cards block... keeping structure but adding more padding and better contrast -->
+                <div class="glass-card rounded-2xl p-8 group h-full">
+                    <div class="w-14 h-14 rounded-xl icon-box flex items-center justify-center mb-8 overflow-hidden relative shadow-lg">
+                        <svg class="w-7 h-7 text-brand-400 relative z-10 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 11c0 3.517-1.009 6.799-2.753 9.571m-3.44-2.04l.054-.09A13.916 13.916 0 008 11a4 4 0 118 0c0 1.017-.07 2.019-.203 3m-2.118 6.844A21.88 21.88 0 0015.171 17m3.839 1.132c.645-2.266.99-4.659.99-7.132A8 8 0 008 4.07M3 15.364c.64-1.319 1-2.8 1-4.364 0-1.457.39-2.823 1.07-4" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Human Psychology Engine</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">Analyzes whether the problem is actually painful enough for users to pay or switch. Evaluates emotional hooks vs logical pain points.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 group h-full">
+                    <div class="w-14 h-14 rounded-xl icon-box flex items-center justify-center mb-8 overflow-hidden relative shadow-lg">
+                        <svg class="w-7 h-7 text-brand-400 relative z-10 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Failure Risk Prediction</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">Identifies the Top 3 reasons your specific idea will fail before it starts (e.g., distribution block, high CAC, technical moat absence).</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 group h-full">
+                    <div class="w-14 h-14 rounded-xl icon-box flex items-center justify-center mb-8 overflow-hidden relative shadow-lg">
+                        <svg class="w-7 h-7 text-brand-400 relative z-10 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Competitor Gap Detection</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">Maps the current landscape, analyzes what incumbents are doing wrong, and provides the exact "wedge" needed to steal market share.</p>
+                </div>
+                
+                <div class="glass-card rounded-2xl p-8 group h-full">
+                    <div class="w-14 h-14 rounded-xl icon-box flex items-center justify-center mb-8 overflow-hidden relative shadow-lg">
+                        <svg class="w-7 h-7 text-brand-400 relative z-10 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Real-World Feasibility</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">Evaluates time-to-market, initial capital required, and regulatory hurdles. Provides a concrete score out of 100 based on execution reality.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 group h-full">
+                    <div class="w-14 h-14 rounded-xl icon-box flex items-center justify-center mb-8 overflow-hidden relative shadow-lg">
+                        <svg class="w-7 h-7 text-brand-400 relative z-10 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M12 8c-1.657 0-3 .895-3 2s1.343 2 3 2 3 .895 3 2-1.343 2-3 2m0-8c1.11 0 2.08.402 2.599 1M12 8V7m0 1v8m0 0v1m0-1c-1.11 0-2.08-.402-2.599-1M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Monetization Engineering</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">Suggests optimal business models (SaaS, usage-based, marketplace) customized to the audience's willingness to pay.</p>
+                </div>
+
+                <div class="glass-card rounded-2xl p-8 group h-full">
+                    <div class="w-14 h-14 rounded-xl icon-box flex items-center justify-center mb-8 overflow-hidden relative shadow-lg">
+                        <svg class="w-7 h-7 text-brand-400 relative z-10 group-hover:scale-110 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
+                        </svg>
+                    </div>
+                    <h3 class="text-xl font-bold mb-4 text-white group-hover:text-brand-400 transition-colors">Tactical Execution Plan</h3>
+                    <p class="text-gray-400 text-sm leading-relaxed font-light">Generates a structured, week-by-week blueprint taking you from validated conceptualization to Minimum Viable Product launch.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works Section -->
+    <section id="how-it-works" class="py-32 relative z-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="text-center mb-20">
+                <span class="text-brand-400 font-semibold uppercase tracking-widest text-sm letter-spacing-2">The Process</span>
+                <h2 class="text-3xl md:text-5xl font-bold mt-4">Validation in Three Steps</h2>
+            </div>
+            
+            <div class="relative">
+                <!-- Connecting Line (Desktop) -->
+                <div class="hidden md:block absolute top-[40%] left-0 w-full h-px bg-gradient-to-r from-transparent via-brand-500/50 to-transparent z-0"></div>
+                
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-16 relative z-10">
+                    <div class="text-center relative group">
+                        <div class="w-24 h-24 mx-auto rounded-full bg-dark-800/80 backdrop-blur-md border border-brand-500/30 flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(14,165,233,0.15)] group-hover:shadow-[0_0_40px_rgba(14,165,233,0.4)] transition-shadow duration-500">
+                            <span class="text-3xl font-bold text-white group-hover:text-brand-400 transition-colors">1</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Brain Dump</h3>
+                        <p class="text-gray-400 font-light leading-relaxed">Input your raw idea, target audience, and assumptions. Don't worry about structure; our NLP parses context automatically.</p>
+                    </div>
+
+                    <div class="text-center relative group">
+                        <div class="w-24 h-24 mx-auto rounded-full bg-dark-800/80 backdrop-blur-md border border-brand-accent/40 flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(139,92,246,0.15)] group-hover:shadow-[0_0_40px_rgba(139,92,246,0.4)] transition-shadow duration-500">
+                            <span class="text-3xl font-bold text-white group-hover:text-brand-accent transition-colors">2</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">System Scans</h3>
+                        <p class="text-gray-400 font-light leading-relaxed">Our AI runs your concept through 14 business frameworks (SWOT, Lean Canvas, PESTLE) instantly.</p>
+                    </div>
+
+                    <div class="text-center relative group">
+                        <div class="w-24 h-24 mx-auto rounded-full bg-dark-800/80 backdrop-blur-md border border-green-500/30 flex items-center justify-center mb-8 shadow-[0_0_40px_rgba(34,197,94,0.15)] group-hover:shadow-[0_0_40px_rgba(34,197,94,0.4)] transition-shadow duration-500">
+                            <span class="text-3xl font-bold text-white group-hover:text-green-400 transition-colors">3</span>
+                        </div>
+                        <h3 class="text-2xl font-bold mb-4 text-white">Actionable Blueprint</h3>
+                        <p class="text-gray-400 font-light leading-relaxed">Download a high-density intelligence report and step-by-step launch roadmap. Ready for investor pitches.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    
+
+    <!-- Compare Section -->
+    <section id="comparison" class="py-32 relative z-10 border-t border-white/5 border-b border-white/5">
+        <div class="max-w-5xl mx-auto px-6 lg:px-8">
+            <h2 class="text-3xl md:text-5xl font-bold mb-20 text-center">Standard AI vs <span class="text-gradient-brand">ValidatorAI</span></h2>
+            
+            <div class="glass-card rounded-[2rem] overflow-hidden p-0 border border-white/10 shadow-2xl">
+                <div class="grid grid-cols-1 md:grid-cols-2">
+                    <!-- Generic AI -->
+                    <div class="p-12 border-b md:border-b-0 md:border-r border-white/10 bg-dark-900/60 backdrop-blur-md">
+                        <div class="text-xl font-semibold text-gray-400 mb-10 flex items-center gap-3">
+                            <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 9l3 3-3 3m5 0h3M5 20h14a2 2 0 002-2V6a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>
+                            Generic Chatbots
+                        </div>
+                        <ul class="space-y-8">
+                            <li class="flex items-start gap-4">
+                                <span class="bg-red-500/10 p-1 rounded text-red-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></span>
+                                <span class="text-gray-400 text-lg leading-snug">"Yes-man" validation (says every idea is good)</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <span class="bg-red-500/10 p-1 rounded text-red-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></span>
+                                <span class="text-gray-400 text-lg leading-snug">Surface-level generic advice</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <span class="bg-red-500/10 p-1 rounded text-red-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></span>
+                                <span class="text-gray-400 text-lg leading-snug">No structured frameworks applied</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <span class="bg-red-500/10 p-1 rounded text-red-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" /></svg></span>
+                                <span class="text-gray-400 text-lg leading-snug">Generates text, not business logic</span>
+                            </li>
+                        </ul>
+                    </div>
+                    
+                    <!-- ValidatorAI -->
+                    <div class="p-12 bg-gradient-to-br from-brand-900/30 to-brand-accent/20 relative overflow-hidden backdrop-blur-md">
+                        <div class="absolute top-0 right-0 w-48 h-48 bg-brand-500/20 rounded-full filter blur-[60px] animate-pulse"></div>
+                        <div class="text-2xl font-bold text-white mb-10 flex items-center gap-3">
+                            <span class="bg-brand-500/30 p-2 rounded-lg text-brand-400 shadow-[0_0_15px_rgba(56,189,248,0.5)]"><svg class="w-6 h-6 text-brand-400" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></span>
+                            ValidatorAI
+                        </div>
+                        <ul class="space-y-8 relative z-10">
+                            <li class="flex items-start gap-4">
+                                <span class="bg-brand-400/20 p-1 rounded text-brand-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></span>
+                                <span class="text-white text-lg font-medium leading-snug">Critical analysis exposing fatal flaws immediately</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <span class="bg-brand-400/20 p-1 rounded text-brand-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></span>
+                                <span class="text-white text-lg font-medium leading-snug">Data-driven competitor weakness mapping</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <span class="bg-brand-400/20 p-1 rounded text-brand-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></span>
+                                <span class="text-white text-lg font-medium leading-snug">Automated SWOT, Lean Canvas, & Risk Matrix</span>
+                            </li>
+                            <li class="flex items-start gap-4">
+                                <span class="bg-brand-400/20 p-1 rounded text-brand-400 flex-shrink-0"><svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7" /></svg></span>
+                                <span class="text-white text-lg font-medium leading-snug">Step-by-step execution and launch roadmap</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+  
+
+    <section id="contact" class="py-32 border-t border-white/5 text-center">
+        <div class="max-w-3xl mx-auto px-6">
+            <h2 class="text-4xl font-bold mb-6">Contact Us</h2>
+
+            <form class="space-y-4">
+                <input type="text" 
+                placeholder="Your Name" class="w-full p-4 rounded-lg bg-dark-800 border border-white/10 text-white outline-none">
+                <input type="email"
+                 placeholder="Your Email" class="w-full p-4 rounded-lg bg-dark-800 border border-white/10 text-white outline-none">
+                <textarea placeholder="Your Message" class="w-full p-4 rounded-lg bg-dark-800 border border-white/10 text-white outline-none"></textarea>
+
+                <button class="btn-primary px-8 py-3 rounded-xl font-semibold">
+                    Send Message
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <section id="signin" class="py-32 border-t border-white/5 text-center">
+        <div class="max-w-md mx-auto px-6">
+
+            <h2 class="text-4xl font-bold mb-6">
+                Sign In to <span class="text-gradient-brand">Your Account</span>
+            </h2>
+
+            <p class="text-gray-400 mb-10">
+                Access your dashboard and validate your startup ideas instantly.
+            </p>
+
+            <form class="space-y-5">
+
+                <!-- Email -->
+                <input type="email"
+                placeholder="Email address"
+                    class="w-full p-4 rounded-xl bg-dark-800 border border-white/10 text-white outline-none focus:border-brand-500">
+
+                <!-- Password -->
+                <input type="password" 
+                
+                placeholder="Password"
+                    class="w-full p-4 rounded-xl bg-dark-800 border border-white/10 text-white outline-none focus:border-brand-500">
+
+                <!-- Remember + Forgot -->
+                <div class="flex justify-between items-center text-sm text-gray-400">
+                    <label class="flex items-center gap-2">
+                        <input type="checkbox" class="accent-brand-500">
+                        Remember me
+                    </label>
+                    <a href="#" class="hover:text-brand-400">Forgot password?</a>
+                </div>
+
+                <!-- Button -->
+                <button class="w-full btn-primary py-4 rounded-xl font-bold">
+                    Sign In
+                </button>
+
+            </form>
+
+            <!-- Divider -->
+            <div class="my-6 text-gray-500 text-sm">or</div>
+
+            <!-- Google Login -->
+            <button class="w-full py-3 rounded-xl border border-white/10 text-white hover:bg-white/5 transition">
+                Continue with Google
+            </button>
+
+            <!-- Sign Up -->
+            <p class="mt-6 text-gray-400 text-sm">
+                Don’t have an account?
+                <a href="#signup" class="text-brand-400 hover:underline">Sign Up</a>
+            </p>
+
+        </div>
+    </section>
+
+
+    <section id="ai_tools_uses" class="py-32 relative z-10 border-t border-white/5">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8 text-center">
+
+            <h2 class="text-4xl font-bold mb-4">🚀 AI Tools for Startup Validation</h2>
+            <p class="text-gray-400">Explore powerful AI tools to validate, build, and grow your startup    idea</p>
+        </div>
+    </section>
+
+    <!-- 🔷 Tools Grid -->
+    <section class="px-8 pb-16 grid md:grid-cols-3 gap-8">
+
+        <!-- Tool Card -->
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">💡 Idea Validator</h3>
+        <p class="text-gray-400 mb-4">Analyze your startup idea with AI and get a validation score.</p>
+        <a href="idea-validator.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">👥 Customer Simulator</h3>
+        <p class="text-gray-400 mb-4">Simulate real customer feedback and reactions.</p>
+        <a href="customer-simulator.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">📊 Market Size Estimator</h3>
+        <p class="text-gray-400 mb-4">Calculate TAM, SAM, and SOM for your idea.</p>
+        <a href="market-estimator.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">🏆 Competitor Analyzer</h3>
+        <p class="text-gray-400 mb-4">Identify competitors and find market gaps.</p>
+        <a href="competitor-analysis.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">🔍 AI Research Assistant</h3>
+        <p class="text-gray-400 mb-4">Get insights, trends, and industry research instantly.</p>
+        <a href="research-assistant.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">📈 Trend Analyzer</h3>
+        <p class="text-gray-400 mb-4">Analyze market demand and trending ideas.</p>
+        <a href="trend-analyzer.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">📋 Business Model Generator</h3>
+        <p class="text-gray-400 mb-4">Generate revenue models and strategies.</p>
+        <a href="business-model.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">📊 Pitch Deck Generator</h3>
+        <p class="text-gray-400 mb-4">Create investor-ready pitch decks.</p>
+        <a href="pitch-deck.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">🌐 Landing Page Generator</h3>
+        <p class="text-gray-400 mb-4">Generate MVP landing pages instantly.</p>
+        <a href="landing-page.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">🤖 AI Startup Mentor</h3>
+        <p class="text-gray-400 mb-4">Get personalized startup advice.</p>
+        <a href="mentor.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">🔄 Pivot Assistant</h3>
+        <p class="text-gray-400 mb-4">Improve or pivot your idea with AI suggestions.</p>
+        <a href="pivot.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">⚖️ AI Idea Battle</h3>
+        <p class="text-gray-400 mb-4">Compare two ideas and find the best one.</p>
+        <a href="idea-battle.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">⚠️ Risk Analyzer</h3>
+        <p class="text-gray-400 mb-4">Predict risks and failure chances.</p>
+        <a href="risk-analyzer.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">💰 Revenue Predictor</h3>
+        <p class="text-gray-400 mb-4">Estimate growth and profits.</p>
+        <a href="revenue.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+        <div class="bg-gray-900 p-6 rounded-2xl shadow-lg hover:scale-105 transition">
+        <h3 class="text-xl font-semibold mb-2">👤 User Persona Generator</h3>
+        <p class="text-gray-400 mb-4">Create detailed customer personas.</p>
+        <a href="persona.html" class="text-indigo-400 hover:underline">Use Tool →</a>
+        </div>
+
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-dark-900 border-t border-white/5 pt-20 pb-10 relative z-10">
+        <div class="max-w-7xl mx-auto px-6 lg:px-8">
+            <div class="grid grid-cols-1 md:grid-cols-12 gap-12 mb-16">
+                <!-- Branding -->
+                <div class="col-span-1 md:col-span-4">
+                    <span class="text-2xl font-bold tracking-tighter text-white flex items-center gap-2 mb-6">
+                        <svg class="w-8 h-8 text-brand-500" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 10V3L4 14h7v7l9-11h-7z" />
+                        </svg>
+                        Validator<span class="text-gradient-brand">AI</span>
+                    </span>
+                    <p class="text-gray-400 text-sm leading-relaxed max-w-xs">Automating business intelligence for the next generation of founders to build successful tech empires.</p>
+                </div>
+                
+                <!-- Links -->
+                <div class="col-span-1 md:col-span-2 md:col-start-7">
+                    <h4 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Product</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Features</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Frameworks</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Case Studies</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Resources</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Startup Guide</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Blog</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Pitch Deck Templates</a></li>
+                    </ul>
+                </div>
+                <div class="col-span-1 md:col-span-2">
+                    <h4 class="text-white font-bold mb-6 tracking-wide uppercase text-sm">Company</h4>
+                    <ul class="space-y-4 text-sm text-gray-400 font-medium">
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">About</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Contact</a></li>
+                        <li><a href="#" class="hover:text-brand-400 transition-colors">Privacy Policy</a></li>
+                    </ul>
+                </div>
+            </div>
+            <div class="border-t border-white/10 pt-8 flex flex-col md:flex-row justify-between items-center">
+                <p class="text-gray-500 text-sm font-medium">© 2026 ValidatorAI. All rights reserved.</p>
+                <div class="flex gap-5 mt-4 md:mt-0">
+                    <a href="#" class="text-gray-500 hover:text-white transition-colors"><svg class="w-5 h-5" fill="currentColor" viewBox="0 0 24 24"><path d="M24 4.557... (truncated for brevity, normally place real svg path here) M12 0c-6.626 0-12 5.373-12 12..."/></svg></a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Script for smooth scroll -->
+    <script>
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                document.querySelector(this.getAttribute('href')).scrollIntoView({
+                    behavior: 'smooth'
+                });
+            });
+        });
+    </script>
+</body>
+</html>
