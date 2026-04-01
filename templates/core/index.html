@@ -1,0 +1,12 @@
+<h1>AI Startup Validator</h1>
+
+<form method="POST" action="/validate/">
+    {% csrf_token %}
+    
+    <input type="text" name="idea" placeholder="Enter your startup idea" required>
+    <input type="text" name="audience" placeholder="Target audience" required>
+    
+    <textarea name="problem" placeholder="Problem you are solving"></textarea>
+
+    <button type="submit">Validate Idea</button>
+</form>
