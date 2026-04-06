@@ -1,5 +1,182 @@
-<h2>Validation Result</h2>
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AI Validator Reports</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
 
-<pre>{{ report }}</pre>
+<body class="bg-gray-50">
 
-<a href="/">Try Again</a>
+  <!-- Navbar -->
+  <nav class="bg-white shadow-sm px-6 py-4 flex justify-between items-center">
+    <h1 class="text-xl font-bold text-blue-600">AI Validator</h1>
+    <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600 transition">
+      Logout
+    </button>
+  </nav>
+
+  <div class="flex">
+
+    <!-- Sidebar -->
+    <aside class="hidden md:block w-64 bg-white border-r min-h-screen p-5">
+      <ul class="space-y-4">
+        <li class="text-blue-600 font-semibold">Dashboard</li>
+        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">Reports</li>
+        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">History</li>
+        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">Settings</li>
+      </ul>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-1 p-6">
+
+      <!-- Summary -->
+      <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-6 mb-8">
+
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+          <p class="text-gray-500 text-sm">Total Reports</p>
+          <h2 class="text-2xl font-bold mt-1">18</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+          <p class="text-gray-500 text-sm">Success Score</p>
+          <h2 class="text-2xl font-bold text-green-500 mt-1">78%</h2>
+        </div>
+
+        <div class="bg-white p-5 rounded-xl shadow-sm">
+          <p class="text-gray-500 text-sm">Pending</p>
+          <h2 class="text-2xl font-bold text-yellow-500 mt-1">2</h2>
+        </div>
+
+      </div>
+
+      <!-- History -->
+      <div class="bg-white rounded-xl shadow-sm p-6 mb-8">
+        <h2 class="text-lg font-semibold mb-4">Report History</h2>
+
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm">
+            <thead>
+              <tr class="text-left border-b">
+                <th class="py-3">Idea</th>
+                <th>Date</th>
+                <th>Score</th>
+                <th></th>
+              </tr>
+            </thead>
+
+            <tbody id="historyTable">
+              <tr class="border-b">
+                <td class="py-3">AI Resume Builder</td>
+                <td>2026-04-05</td>
+                <td class="text-green-500 font-semibold">82%</td>
+                <td>
+                  <button onclick="showDetails('AI Resume Builder')" 
+                    class="text-blue-500 hover:underline">
+                    View
+                  </button>
+                </td>
+              </tr>
+
+              <tr>
+                <td class="py-3">Startup Analyzer</td>
+                <td>2026-04-03</td>
+                <td class="text-yellow-500 font-semibold">65%</td>
+                <td>
+                  <button onclick="showDetails('Startup Analyzer')" 
+                    class="text-blue-500 hover:underline">
+                    View
+                  </button>
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Report Details -->
+      <div id="details" class="hidden bg-white rounded-xl shadow-sm p-6">
+
+        <div class="flex justify-between items-center mb-4">
+          <h2 class="text-lg font-semibold">Report Details</h2>
+          <button onclick="downloadReport()" 
+            class="bg-green-500 text-white px-4 py-2 rounded-lg hover:bg-green-600 text-sm">
+            Download
+          </button>
+        </div>
+
+        <p class="mb-4 text-gray-700">
+          <span class="font-medium">Idea:</span> 
+          <span id="ideaName">-</span>
+        </p>
+
+        <!-- Factors -->
+        <div class="space-y-4">
+
+          <!-- Market -->
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span>Market Demand</span>
+              <span>80%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded">
+              <div class="bg-green-500 h-2 rounded w-4/5"></div>
+            </div>
+          </div>
+
+          <!-- Competition -->
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span>Competition</span>
+              <span>60%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded">
+              <div class="bg-yellow-500 h-2 rounded w-3/5"></div>
+            </div>
+          </div>
+
+          <!-- Feasibility -->
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span>Feasibility</span>
+              <span>75%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded">
+              <div class="bg-blue-500 h-2 rounded w-3/4"></div>
+            </div>
+          </div>
+
+          <!-- Profitability -->
+          <div>
+            <div class="flex justify-between text-sm mb-1">
+              <span>Profitability</span>
+              <span>70%</span>
+            </div>
+            <div class="w-full bg-gray-200 h-2 rounded">
+              <div class="bg-purple-500 h-2 rounded w-2/3"></div>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+
+    </main>
+  </div>
+
+  <!-- Script -->
+  <script>
+    function showDetails(name) {
+      document.getElementById("details").classList.remove("hidden");
+      document.getElementById("ideaName").innerText = name;
+    }
+
+    function downloadReport() {
+      alert("Downloading report...");
+    }
+  </script>
+
+</body>
+</html>

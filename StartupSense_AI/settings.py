@@ -37,7 +37,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-     'core.apps.CoreConfig',
+
+    'core.apps.CoreConfig',
     'users.apps.UsersConfig',
     'validator.apps.ValidatorConfig',
     'analysis.apps.AnalysisConfig',

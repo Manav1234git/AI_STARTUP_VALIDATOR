@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>API Docs</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+
+<body class="bg-gray-50">
+
+  <!-- Navbar -->
+  <nav class="bg-white shadow px-6 py-4 flex justify-between">
+    <h1 class="text-xl font-bold text-blue-600">AI Validator API</h1>
+  </nav>
+
+  <div class="flex">
+
+    <!-- Sidebar -->
+    <aside class="w-64 bg-white border-r min-h-screen p-6 hidden md:block">
+      <ul class="space-y-4">
+        <li class="font-semibold text-blue-600">API Docs</li>
+        <li><a href="#validate" class="text-gray-600 hover:text-blue-500">Validate</a></li>
+        <li><a href="#history" class="text-gray-600 hover:text-blue-500">History</a></li>
+        <li><a href="#report" class="text-gray-600 hover:text-blue-500">Report</a></li>
+      </ul>
+    </aside>
+
+    <!-- Content -->
+    <main class="flex-1 p-6 max-w-5xl mx-auto">
+
+      <h1 class="text-3xl font-bold mb-6">API Documentation</h1>
+
+      <!-- Validate -->
+      <section id="validate" class="mb-8 bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2">POST /api/validate</h2>
+        <p class="text-gray-600 mb-3">Validate startup idea</p>
+
+        <div class="bg-gray-900 text-green-400 p-4 rounded text-sm">
+<pre>{
+  "idea": "AI Resume Builder",
+  "category": "SaaS",
+  "market": "Students"
+}</pre>
+        </div>
+      </section>
+
+      <!-- History -->
+      <section id="history" class="mb-8 bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2">GET /api/history</h2>
+        <p class="text-gray-600">Fetch validation history</p>
+      </section>
+
+      <!-- Report -->
+      <section id="report" class="bg-white p-6 rounded-xl shadow">
+        <h2 class="text-xl font-semibold mb-2">GET /api/report/{id}</h2>
+        <p class="text-gray-600 mb-3">Get report details</p>
+
+        <div class="bg-gray-900 text-blue-400 p-4 rounded text-sm">
+<pre>{
+  "score": 85,
+  "market_demand": 80,
+  "competition": 60
+}</pre>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+</body>
+</html>
