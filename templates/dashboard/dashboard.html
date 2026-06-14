@@ -1,126 +1,2093 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Dashboard</title>
-  <script src="https://cdn.tailwindcss.com"></script>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ValidatorAI — Startup Intelligence</title>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;500;600;700;800&family=DM+Sans:ital,wght@0,300;0,400;0,500;1,300&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #04050a;
+  --surface: #0c0d14;
+  --surface2: #12131f;
+  --border: rgba(255,255,255,0.07);
+  --border-hover: rgba(99,102,241,0.4);
+  --text: #f1f2f7;
+  --muted: #6b7280;
+  --accent: #6366f1;
+  --accent2: #8b5cf6;
+  --green: #22d3a0;
+  --yellow: #f59e0b;
+  --red: #f43f5e;
+  --blue: #38bdf8;
+  --radius: 16px;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  font-family: 'DM Sans', sans-serif;
+  background: var(--bg);
+  color: var(--text);
+  min-height: 100vh;
+  overflow-x: hidden;
+}
+
+/* BG GRID */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image:
+    linear-gradient(rgba(99,102,241,0.03) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(99,102,241,0.03) 1px, transparent 1px);
+  background-size: 40px 40px;
+  z-index: 0;
+  pointer-events: none;
+}
+
+body::after {
+  content: '';
+  position: fixed;
+  top: -20%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 800px;
+  height: 500px;
+  background: radial-gradient(ellipse, rgba(99,102,241,0.12) 0%, transparent 70%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+.wrap { position: relative; z-index: 1; }
+
+/* NAV */
+nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 20px 40px;
+  border-bottom: 1px solid var(--border);
+  backdrop-filter: blur(12px);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  background: rgba(4,5,10,0.8);
+}
+
+.logo {
+  font-family: 'Syne', sans-serif;
+  font-weight: 800;
+  font-size: 1.2rem;
+  background: linear-gradient(135deg, #fff 0%, var(--accent) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+  letter-spacing: -0.5px;
+}
+
+.nav-badge {
+  background: rgba(99,102,241,0.15);
+  border: 1px solid rgba(99,102,241,0.3);
+  color: #a5b4fc;
+  font-size: 0.72rem;
+  font-weight: 500;
+  padding: 4px 12px;
+  border-radius: 99px;
+  letter-spacing: 0.03em;
+}
+
+/* HERO INPUT SECTION */
+.hero {
+  max-width: 760px;
+  margin: 60px auto 0;
+  padding: 0 24px 60px;
+  text-align: center;
+}
+
+.hero h1 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(2rem, 5vw, 3.2rem);
+  font-weight: 800;
+  line-height: 1.1;
+  letter-spacing: -1.5px;
+  margin-bottom: 16px;
+}
+
+.hero h1 span {
+  background: linear-gradient(135deg, var(--accent) 0%, var(--accent2) 100%);
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  -webkit-text-fill-color: transparent;
+}
+
+.hero p {
+  color: var(--muted);
+  font-size: 1rem;
+  line-height: 1.7;
+  margin-bottom: 40px;
+  font-weight: 300;
+}
+
+/* INPUT CARD */
+.input-card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 24px;
+  padding: 32px;
+  text-align: left;
+  transition: border-color 0.3s;
+}
+
+.input-card:focus-within {
+  border-color: rgba(99,102,241,0.3);
+  box-shadow: 0 0 0 1px rgba(99,102,241,0.1), 0 20px 60px rgba(0,0,0,0.4);
+}
+
+.form-label {
+  display: block;
+  font-size: 0.78rem;
+  font-weight: 500;
+  color: var(--muted);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  margin-bottom: 8px;
+}
+
+.form-group { margin-bottom: 20px; }
+
+textarea, input, select {
+  width: 100%;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  color: var(--text);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.95rem;
+  padding: 14px 16px;
+  outline: none;
+  transition: border-color 0.2s;
+  resize: none;
+}
+
+textarea:focus, input:focus, select:focus {
+  border-color: rgba(99,102,241,0.5);
+}
+
+textarea { min-height: 110px; }
+
+select option { background: #1a1b2e; }
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.btn-primary {
+  width: 100%;
+  padding: 16px;
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  border-radius: 14px;
+  color: #fff;
+  font-family: 'Syne', sans-serif;
+  font-size: 1rem;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.02em;
+  margin-top: 8px;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary:hover:not(:disabled) {
+  transform: translateY(-1px);
+  box-shadow: 0 8px 30px rgba(99,102,241,0.4);
+}
+
+.btn-primary:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-primary .btn-shimmer {
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  transform: translateX(-100%);
+  transition: transform 0.6s;
+}
+
+.btn-primary:hover .btn-shimmer { transform: translateX(100%); }
+
+.btn-mic {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+  color: var(--text);
+  cursor: pointer;
+  margin-bottom: 16px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: all 0.2s;
+}
+.btn-mic.listening {
+  background: rgba(244,63,94,0.15);
+  border-color: var(--red);
+  color: var(--red);
+  animation: micPulse 1.2s infinite;
+}
+@keyframes micPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(244,63,94,0.4); }
+  50% { box-shadow: 0 0 0 10px rgba(244,63,94,0); }
+}
+.btn-upload {
+  background: var(--surface2);
+  border: 1px dashed var(--border-hover);
+  border-radius: 10px;
+  padding: 10px 16px;
+  color: #a5b4fc;
+  cursor: pointer;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  width: 100%;
+  transition: all 0.2s;
+}
+.btn-upload:hover {
+  background: rgba(99,102,241,0.1);
+  border-color: var(--accent);
+}
+.image-preview {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 12px;
+}
+.img-thumb {
+  width: 70px;
+  height: 70px;
+  border-radius: 8px;
+  object-fit: cover;
+  border: 1px solid var(--border);
+  position: relative;
+}
+.img-thumb-wrap {
+  position: relative;
+}
+.img-remove {
+  position: absolute;
+  top: -6px;
+  right: -6px;
+  width: 20px;
+  height: 20px;
+  border-radius: 50%;
+  background: var(--red);
+  color: #fff;
+  border: none;
+  cursor: pointer;
+  font-size: 0.7rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.btn-pdf {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  color: #fff !important;
+  border-color: transparent;
+  font-weight: 600;
+}
+
+.btn-pdf:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 4px 15px rgba(99, 102, 241, 0.3);
+}
+
+.btn-tts {
+  background: var(--surface2);
+  border-color: rgba(99, 102, 241, 0.3);
+  color: var(--accent) !important;
+}
+
+.btn-tts:hover {
+  background: rgba(99, 102, 241, 0.1);
+  border-color: var(--accent);
+}
+
+.btn-tts.speaking {
+  background: rgba(34, 211, 160, 0.15) !important;
+  border-color: var(--green) !important;
+  color: var(--green) !important;
+  animation: ttsPulse 1.5s ease-in-out infinite;
+}
+
+@keyframes ttsPulse {
+  0%, 100% { box-shadow: 0 0 0 0 rgba(34, 211, 160, 0.4); }
+  50% { box-shadow: 0 0 0 8px rgba(34, 211, 160, 0); }
+}
+
+#stop-tts-btn {
+  background: rgba(244, 63, 94, 0.1) !important;
+  border-color: var(--red) !important;
+  color: var(--red) !important;
+}
+
+.btn-listen {
+  background: transparent;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  color: var(--muted);
+  padding: 4px 10px;
+  font-size: 0.72rem;
+  cursor: pointer;
+  margin-left: auto;
+  transition: all 0.2s;
+  font-family: 'DM Sans', sans-serif;
+}
+
+.btn-listen:hover {
+  color: var(--accent);
+  border-color: var(--accent);
+  background: rgba(99, 102, 241, 0.05);
+}
+
+.btn-listen.speaking {
+  color: var(--green);
+  border-color: var(--green);
+  background: rgba(34, 211, 160, 0.05);
+}
+
+
+/* LOADING */
+#loading-state {
+  display: none;
+  text-align: center;
+  padding: 60px 24px;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+.loader-ring {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  border: 2px solid rgba(99,102,241,0.2);
+  border-top-color: var(--accent);
+  animation: spin 1s linear infinite;
+  margin: 0 auto 24px;
+}
+
+@keyframes spin { to { transform: rotate(360deg); } }
+
+.loading-steps { list-style: none; text-align: left; display: inline-block; }
+.loading-step {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 6px 0;
+  font-size: 0.9rem;
+  color: var(--muted);
+  transition: color 0.3s;
+}
+.loading-step.active { color: var(--text); }
+.loading-step.done { color: var(--green); }
+.step-dot {
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: var(--border);
+  flex-shrink: 0;
+  transition: background 0.3s;
+}
+.loading-step.active .step-dot { background: var(--accent); animation: pulse 1s infinite; }
+.loading-step.done .step-dot { background: var(--green); }
+@keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.3} }
+
+/* DASHBOARD */
+#dashboard { display: none; max-width: 1200px; margin: 0 auto; padding: 40px 24px 80px; }
+
+.dash-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+  flex-wrap: wrap;
+  gap: 16px;
+}
+
+.verdict-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  padding: 6px 16px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  margin-bottom: 12px;
+}
+
+.pill-green { background: rgba(34,211,160,0.12); color: var(--green); border: 1px solid rgba(34,211,160,0.3); }
+.pill-yellow { background: rgba(245,158,11,0.12); color: var(--yellow); border: 1px solid rgba(245,158,11,0.3); }
+.pill-red { background: rgba(244,63,94,0.12); color: var(--red); border: 1px solid rgba(244,63,94,0.3); }
+
+.dash-header h2 {
+  font-family: 'Syne', sans-serif;
+  font-size: clamp(1.6rem, 3vw, 2.2rem);
+  font-weight: 800;
+  letter-spacing: -0.5px;
+}
+
+.btn-reset {
+  padding: 10px 20px;
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  color: var(--muted);
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  cursor: pointer;
+  transition: all 0.2s;
+  white-space: nowrap;
+}
+.btn-reset:hover { color: var(--text); border-color: var(--border-hover); }
+
+/* GRID */
+.dash-grid {
+  display: grid;
+  grid-template-columns: repeat(12, 1fr);
+  gap: 16px;
+}
+
+.card {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  transition: border-color 0.3s;
+  position: relative;
+  overflow: hidden;
+}
+
+.card:hover { border-color: rgba(99,102,241,0.2); }
+
+.card-title {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-bottom: 16px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.card-icon {
+  width: 28px; height: 28px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 0.85rem;
+}
+
+/* SCORE HERO */
+.col-8 { grid-column: span 8; }
+.col-4 { grid-column: span 4; }
+.col-6 { grid-column: span 6; }
+.col-3 { grid-column: span 3; }
+.col-12 { grid-column: span 12; }
+
+.score-hero {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+  flex-wrap: wrap;
+}
+
+.score-ring-wrap { position: relative; flex-shrink: 0; }
+
+.score-ring-wrap svg {
+  transform: rotate(-90deg);
+}
+
+.score-num {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.score-num .num {
+  font-family: 'Syne', sans-serif;
+  font-size: 2.4rem;
+  font-weight: 800;
+  line-height: 1;
+}
+
+.score-num .label {
+  font-size: 0.65rem;
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--muted);
+  margin-top: 2px;
+}
+
+.score-details { flex: 1; min-width: 200px; }
+
+.summary-text {
+  color: var(--muted);
+  font-size: 0.9rem;
+  line-height: 1.7;
+  margin-bottom: 20px;
+  font-weight: 300;
+}
+
+.stat-chips { display: flex; flex-wrap: wrap; gap: 10px; }
+
+.stat-chip {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 10px 16px;
+}
+
+.stat-chip .chip-label {
+  font-size: 0.68rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+}
+
+.stat-chip .chip-val {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.1rem;
+  font-weight: 700;
+  margin-top: 2px;
+}
+
+/* PROGRESS BARS */
+.bar-row { margin-bottom: 14px; }
+.bar-row:last-child { margin-bottom: 0; }
+
+.bar-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 0.82rem;
+  margin-bottom: 6px;
+}
+
+.bar-track {
+  height: 6px;
+  background: rgba(255,255,255,0.05);
+  border-radius: 99px;
+  overflow: hidden;
+}
+
+.bar-fill {
+  height: 100%;
+  border-radius: 99px;
+  width: 0;
+  transition: width 1.2s cubic-bezier(0.4,0,0.2,1);
+}
+
+/* MAP SECTION */
+.map-section {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 24px;
+  margin-top: 16px;
+}
+
+.map-container {
+  width: 100%;
+  height: 400px;
+  border-radius: 12px;
+  overflow: hidden;
+  background: var(--surface2);
+  position: relative;
+}
+
+#map {
+  width: 100%;
+  height: 100%;
+}
+
+.map-loading {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: var(--surface2);
+  color: var(--muted);
+  font-size: 0.9rem;
+}
+
+.location-stats {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+  gap: 12px;
+  margin-top: 16px;
+}
+
+.location-stat {
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  padding: 12px;
+}
+
+.location-stat .stat-name {
+  font-size: 0.7rem;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.07em;
+  font-weight: 500;
+  margin-bottom: 4px;
+}
+
+.location-stat .stat-value {
+  font-family: 'Syne', sans-serif;
+  font-size: 1.3rem;
+  font-weight: 700;
+}
+
+.stat-low { color: var(--red); }
+.stat-mid { color: var(--yellow); }
+.stat-high { color: var(--green); }
+
+.btn-load-map {
+  background: linear-gradient(135deg, var(--accent), var(--accent2));
+  border: none;
+  color: #fff;
+  padding: 10px 20px;
+  border-radius: 10px;
+  font-family: 'DM Sans', sans-serif;
+  font-size: 0.85rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s;
+  margin-top: 12px;
+}
+
+.btn-load-map:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 6px 20px rgba(99, 102, 241, 0.3);
+}
+
+.btn-load-map:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+
+/* SECTIONS */
+.section-content {
+  font-size: 0.88rem;
+  color: #c4c8d8;
+  line-height: 1.75;
+  font-weight: 300;
+}
+
+.insight-list { list-style: none; }
+.insight-item {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border);
+  font-size: 0.87rem;
+  line-height: 1.5;
+  color: #c4c8d8;
+}
+.insight-item:last-child { border-bottom: none; }
+.insight-icon { flex-shrink: 0; margin-top: 1px; }
+
+/* COMPETITOR TABLE */
+.comp-table { width: 100%; border-collapse: collapse; }
+.comp-table th {
+  text-align: left;
+  font-size: 0.72rem;
+  font-weight: 600;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--muted);
+  padding: 0 0 10px;
+  border-bottom: 1px solid var(--border);
+}
+.comp-table td {
+  padding: 12px 0;
+  font-size: 0.85rem;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  color: #d4d8e8;
+}
+.comp-table td:first-child { font-weight: 500; color: var(--text); }
+
+/* MILESTONE TABLE */
+.milestone-row {
+  display: grid;
+  grid-template-columns: 90px 1fr;
+  gap: 16px;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.04);
+  align-items: start;
+  font-size: 0.85rem;
+}
+.milestone-row:last-child { border-bottom: none; }
+.milestone-time {
+  font-family: 'Syne', sans-serif;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: var(--accent);
+  background: rgba(99,102,241,0.1);
+  border: 1px solid rgba(99,102,241,0.2);
+  border-radius: 6px;
+  padding: 3px 8px;
+  text-align: center;
+  white-space: nowrap;
+}
+
+/* FUNDING TRACKER */
+.funding-stages { display: flex; flex-direction: column; gap: 10px; }
+.funding-stage {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 12px 14px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+  font-size: 0.85rem;
+}
+.funding-stage.active {
+  border-color: rgba(99,102,241,0.4);
+  background: rgba(99,102,241,0.06);
+}
+.funding-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
+.funding-name { font-weight: 600; flex: 1; }
+.funding-amount { color: var(--muted); font-size: 0.8rem; }
+
+/* TAG CLOUD */
+.tag-cloud { display: flex; flex-wrap: wrap; gap: 8px; }
+.tag {
+  padding: 5px 12px;
+  border-radius: 99px;
+  font-size: 0.78rem;
+  font-weight: 500;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  color: #c4c8d8;
+}
+.tag.positive { color: var(--green); border-color: rgba(34,211,160,0.2); background: rgba(34,211,160,0.06); }
+.tag.negative { color: var(--red); border-color: rgba(244,63,94,0.2); background: rgba(244,63,94,0.06); }
+.tag.neutral { color: var(--blue); border-color: rgba(56,189,248,0.2); background: rgba(56,189,248,0.06); }
+
+/* SCORE COLOR CLASSES */
+.score-green { stroke: var(--green); }
+.score-yellow { stroke: var(--yellow); }
+.score-red { stroke: var(--red); }
+.num-green { color: var(--green); }
+.num-yellow { color: var(--yellow); }
+.num-red { color: var(--red); }
+
+/* WARN BOX */
+.warn-box {
+  background: rgba(244,63,94,0.07);
+  border: 1px solid rgba(244,63,94,0.2);
+  border-radius: 10px;
+  padding: 14px;
+  font-size: 0.82rem;
+  color: #fca5a5;
+  line-height: 1.6;
+  margin-top: 16px;
+}
+
+/* ERROR */
+.error-box {
+  max-width: 500px;
+  margin: 60px auto;
+  padding: 24px;
+  background: rgba(244,63,94,0.07);
+  border: 1px solid rgba(244,63,94,0.2);
+  border-radius: 16px;
+  text-align: center;
+  display: none;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  nav { padding: 16px 20px; }
+  .hero { margin-top: 36px; }
+  .form-row { grid-template-columns: 1fr; }
+  .col-8, .col-4, .col-6, .col-3 { grid-column: span 12; }
+  .score-hero { flex-direction: column; text-align: center; }
+  .stat-chips { justify-content: center; }
+  #dashboard { padding: 24px 16px 60px; }
+}
+
+/* FADE IN */
+.fade-up {
+  opacity: 0;
+  transform: translateY(16px);
+  animation: fadeUp 0.5s ease forwards;
+}
+@keyframes fadeUp { to { opacity: 1; transform: translateY(0); } }
+.d1 { animation-delay: 0.05s; }
+.d2 { animation-delay: 0.1s; }
+.d3 { animation-delay: 0.15s; }
+.d4 { animation-delay: 0.2s; }
+.d5 { animation-delay: 0.25s; }
+.d6 { animation-delay: 0.3s; }
+.d7 { animation-delay: 0.35s; }
+.d8 { animation-delay: 0.4s; }
+.d9 { animation-delay: 0.45s; }
+</style>
 </head>
+<body>
+<div class="wrap">
 
-<body class="bg-gray-100">
+<!-- NAV -->
+<nav>
+  <div class="logo">ValidatorAI</div>
+  <a href="{% url 'home' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+        </a>
+</nav>
 
-  <!-- Navbar -->
-  <nav class="bg-white shadow px-6 py-4 flex justify-between items-center">
-    <h1 class="text-xl font-bold text-blue-600">AI Validator</h1>
-    <div class="flex items-center gap-4">
-      <span class="text-gray-600">Welcome, User</span>
-      <button class="bg-red-500 text-white px-4 py-2 rounded-lg hover:bg-red-600">
-        Logout
-      </button>
+<!-- HERO INPUT -->
+<section class="hero" id="input-section">
+  <h1>Validate Your <span>Startup Idea</span><br>With Real AI Intelligence</h1>
+  <p>Get a full market analysis, risk assessment, competitor landscape, funding roadmap, and actionable insights — all in under 30 seconds.</p>
+
+  <div class="input-card">
+    <div class="form-group">
+      <label class="form-label">Your Startup Idea *</label>
+      <textarea id="idea" placeholder="E.g. An AI-powered platform that helps small restaurants in Delhi manage inventory and reduce food waste by predicting demand using historical sales data..."></textarea>
+      
     </div>
-  </nav>
+    <button type="button" id="mic-btn" class="btn-mic" onclick="toggleMic()">
+      🎤 Voice Input
+    </button>
 
-  <div class="flex">
+    <div class="form-group" style="margin-top:16px">
+      <label class="form-label">📸 Add Images (Optional — sketches, screenshots, wireframes)</label>
+      <input type="file" id="idea-images" accept="image/*" multiple 
+            style="display:none" onchange="handleImageUpload(event)">
+      <button type="button" class="btn-upload" onclick="document.getElementById('idea-images').click()">
+        + Upload Images
+      </button>
+      <div id="image-preview" class="image-preview"></div>
+    </div>
 
-    <!-- Sidebar -->
-    <aside class="w-64 bg-white min-h-screen shadow hidden md:block p-5">
-      <ul class="space-y-4">
-        <li class="text-blue-600 font-semibold">Dashboard</li>
-        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">Validate Idea</li>
-        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">Analysis</li>
-        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">Reports</li>
-        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">API Docs</li>
-        <li class="text-gray-600 hover:text-blue-500 cursor-pointer">Profile</li>
-      </ul>
-    </aside>
 
-    <!-- Main Content -->
-    <main class="flex-1 p-6">
 
-      <!-- Title -->
-      <h2 class="text-3xl font-bold mb-6">Dashboard Overview</h2>
-
-      <!-- Cards -->
-      <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Total Ideas</p>
-          <h3 class="text-2xl font-bold mt-1">25</h3>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Reports Generated</p>
-          <h3 class="text-2xl font-bold mt-1">18</h3>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Success Rate</p>
-          <h3 class="text-2xl font-bold text-green-500 mt-1">78%</h3>
-        </div>
-
-        <div class="bg-white p-5 rounded-xl shadow">
-          <p class="text-gray-500 text-sm">Pending</p>
-          <h3 class="text-2xl font-bold text-yellow-500 mt-1">3</h3>
-        </div>
-
+    <div class="form-row">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Target Location</label>
+        <input id="location" type="text" placeholder="E.g. Delhi, Mumbai, Pan-India">
       </div>
-
-      <!-- Recent Reports -->
-      <div class="bg-white p-6 rounded-xl shadow mb-8">
-        <h3 class="text-xl font-semibold mb-4">Recent Reports</h3>
-
-        <div class="overflow-x-auto">
-          <table class="w-full text-left text-sm">
-            <thead>
-              <tr class="border-b">
-                <th class="py-2">Idea</th>
-                <th>Date</th>
-                <th>Score</th>
-                <th>Status</th>
-              </tr>
-            </thead>
-
-            <tbody>
-              <tr class="border-b">
-                <td class="py-2">AI Resume Builder</td>
-                <td>2026-04-05</td>
-                <td class="text-green-500 font-semibold">82%</td>
-                <td><span class="bg-green-100 text-green-600 px-2 py-1 rounded text-xs">Success</span></td>
-              </tr>
-
-              <tr class="border-b">
-                <td class="py-2">Startup Analyzer</td>
-                <td>2026-04-03</td>
-                <td class="text-yellow-500 font-semibold">65%</td>
-                <td><span class="bg-yellow-100 text-yellow-600 px-2 py-1 rounded text-xs">Average</span></td>
-              </tr>
-
-              <tr>
-                <td class="py-2">AI Chat App</td>
-                <td>2026-04-01</td>
-                <td class="text-red-500 font-semibold">45%</td>
-                <td><span class="bg-red-100 text-red-600 px-2 py-1 rounded text-xs">Low</span></td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Industry / Category</label>
+        <select id="industry">
+          <option value="">Select industry...</option>
+          <option>SaaS / Software</option>
+          <option>E-commerce</option>
+          <option>FinTech</option>
+          <option>HealthTech</option>
+          <option>EdTech</option>
+          <option>FoodTech</option>
+          <option>AgriTech</option>
+          <option>CleanTech</option>
+          <option>LogisticsTech</option>
+          <option>Consumer App</option>
+          <option>D2C Brand</option>
+          <option>AI / ML</option>
+          <option>Other</option>
+        </select>
       </div>
+    </div>
 
-      <!-- Activity -->
-      <div class="bg-white p-6 rounded-xl shadow">
-        <h3 class="text-xl font-semibold mb-4">Recent Activity</h3>
-
-        <ul class="space-y-3 text-gray-600">
-          <li>✔️ You validated "AI Resume Builder"</li>
-          <li>📊 Report generated successfully</li>
-          <li>⚠️ New suggestion added for improvement</li>
-          <li>📄 Report downloaded</li>
-        </ul>
+    <div class="form-row" style="margin-top:16px">
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Stage You're At</label>
+        <select id="stage">
+          <option value="idea">💡 Just an Idea</option>
+          <option value="mvp">🔧 Building MVP</option>
+          <option value="launched">🚀 Launched / Early Users</option>
+          <option value="growth">📈 Growing</option>
+        </select>
       </div>
+      <div class="form-group" style="margin-bottom:0">
+        <label class="form-label">Initial Budget (₹)</label>
+        <select id="budget">
+          <option value="bootstrap">Bootstrapped / ₹0–5L</option>
+          <option value="small">₹5L – ₹25L</option>
+          <option value="medium">₹25L – ₹1Cr</option>
+          <option value="funded">₹1Cr+ / Funded</option>
+        </select>
+      </div>
+    </div>
 
-    </main>
+    <button class="btn-primary" id="run-btn" onclick="runValidation()">
+      <div class="btn-shimmer"></div>
+      ✦ Run Full AI Validation
+    </button>
+  </div>
+</section>
 
+<!-- LOADING -->
+<div id="loading-state">
+  <div class="loader-ring"></div>
+  <p style="font-family:'Syne',sans-serif;font-weight:700;margin-bottom:24px;font-size:1.1rem;">Analyzing Your Startup...</p>
+  <ul class="loading-steps" id="steps">
+    <li class="loading-step" id="step-0"><span class="step-dot"></span> Understanding your idea & market</li>
+    <li class="loading-step" id="step-1"><span class="step-dot"></span> Scoring viability & product-market fit</li>
+    <li class="loading-step" id="step-2"><span class="step-dot"></span> Mapping competitors & market size</li>
+    <li class="loading-step" id="step-3"><span class="step-dot"></span> Calculating unit economics & financials</li>
+    <li class="loading-step" id="step-4"><span class="step-dot"></span> Building your go-to-market roadmap</li>
+    <li class="loading-step" id="step-5"><span class="step-dot"></span> Compiling risk & opportunity matrix</li>
+  </ul>
+</div>
+
+<!-- ERROR -->
+<div class="error-box" id="error-box">
+  <div style="font-size:2rem;margin-bottom:12px">⚠️</div>
+  <p id="error-msg" style="color:#fca5a5;margin-bottom:16px"></p>
+  <button class="btn-reset" onclick="resetForm()">Try Again</button>
+</div>
+
+<!-- DASHBOARD -->
+<div id="dashboard">
+  <div class="dash-header">
+      <div>
+        <div id="verdict-pill" class="verdict-pill pill-green">✦ Strong Opportunity</div>
+        <h2 id="verdict-title">Intelligence Report</h2>
+      </div>
+      <div style="display:flex;gap:10px;flex-wrap:wrap">
+        <button class="btn-reset btn-pdf" onclick="exportPDF()">
+          📄 Download PDF
+        </button>
+        <button class="btn-reset btn-tts" id="tts-toggle-btn" onclick="toggleFullReport()">
+          🔊 Read Full Report
+        </button>
+        <button class="btn-reset" onclick="stopSpeaking()" id="stop-tts-btn" style="display:none">
+          ⏸ Stop
+        </button>
+        <button class="btn-reset" onclick="resetForm()">← New Idea</button>
+      </div>
   </div>
 
+
+  <div class="dash-grid">
+
+    <!-- SCORE HERO CARD -->
+    <div class="card col-8 fade-up d1">
+      <div class="card-title">
+          <span class="card-icon" style="background:rgba(99,102,241,0.1)">📊</span>
+          Viability Score
+          <button class="btn-listen" onclick="speakText(document.getElementById('summary').textContent, this)">
+            🔊 Listen
+          </button>
+        </div>
+      <div class="score-hero">
+        <div class="score-ring-wrap">
+          <svg width="140" height="140" viewBox="0 0 140 140">
+            <circle cx="70" cy="70" r="58" fill="none" stroke="rgba(255,255,255,0.05)" stroke-width="8"/>
+            <circle id="score-arc" cx="70" cy="70" r="58" fill="none" stroke-width="8"
+              stroke-linecap="round" stroke-dasharray="0 364" class="score-green"
+              style="transition: stroke-dasharray 1.5s cubic-bezier(0.4,0,0.2,1)"/>
+          </svg>
+          <div class="score-num">
+            <span class="num num-green" id="score-display">0</span>
+            <span class="label">/ 100</span>
+          </div>
+        </div>
+        <div class="score-details">
+          <p class="summary-text" id="summary"></p>
+          <div class="stat-chips">
+            <div class="stat-chip">
+              <div class="chip-label">Market Size</div>
+              <div class="chip-val" id="market-size">—</div>
+            </div>
+            <div class="stat-chip">
+              <div class="chip-label">Growth Rate</div>
+              <div class="chip-val" id="growth-rate">—</div>
+            </div>
+            <div class="stat-chip">
+              <div class="chip-label">Est. MRR (Yr 1)</div>
+              <div class="chip-val" id="mrr">—</div>
+            </div>
+            <div class="stat-chip">
+              <div class="chip-label">Breakeven</div>
+              <div class="chip-val" id="breakeven">—</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RISK PROFILE -->
+    <div class="card col-4 fade-up d2">
+      <div class="card-title"><span class="card-icon" style="background:rgba(244,63,94,0.1)">⚡</span> Risk Profile</div>
+      <div id="risk-bars"></div>
+      <div class="warn-box" id="risk-warning" style="display:none"></div>
+    </div>
+
+    <!-- MARKET FIT -->
+    <div class="card col-4 fade-up d3">
+      <div class="card-title"><span class="card-icon" style="background:rgba(34,211,160,0.1)">🎯</span> Market Fit</div>
+      <div id="market-fit-content"></div>
+    </div>
+
+    <!-- UNIT ECONOMICS -->
+    <div class="card col-4 fade-up d4">
+      <div class="card-title"><span class="card-icon" style="background:rgba(56,189,248,0.1)">💰</span> Unit Economics</div>
+      <div id="unit-econ"></div>
+    </div>
+
+    <!-- LOCATION FEASIBILITY -->
+    <div class="card col-4 fade-up d5">
+      <div class="card-title"><span class="card-icon" style="background:rgba(245,158,11,0.1)">📍</span> Location Feasibility</div>
+      <div class="section-content" id="location-content"></div>
+    </div>
+
+    <!-- COMPETITOR MAP -->
+    <div class="card col-6 fade-up d6">
+      <div class="card-title"><span class="card-icon" style="background:rgba(244,63,94,0.1)">🏢</span> Competitor Landscape</div>
+      <table class="comp-table" id="comp-table">
+        <thead><tr><th>Competitor</th><th>Weakness</th><th>Your Edge</th></tr></thead>
+        <tbody id="comp-body"></tbody>
+      </table>
+    </div>
+
+    <!-- GO-TO-MARKET -->
+    <div class="card col-6 fade-up d7">
+      <div class="card-title"><span class="card-icon" style="background:rgba(99,102,241,0.1)">🗺️</span> Go-To-Market Roadmap</div>
+      <div id="gtm-milestones"></div>
+    </div>
+
+    <!-- FUNDING PATH -->
+    <div class="card col-4 fade-up d8">
+      <div class="card-title"><span class="card-icon" style="background:rgba(34,211,160,0.1)">💼</span> Funding Roadmap</div>
+      <div class="funding-stages" id="funding-stages"></div>
+    </div>
+
+    <!-- STRENGTHS & WEAKNESSES -->
+    <div class="card col-8 fade-up d9">
+      <div class="card-title"><span class="card-icon" style="background:rgba(99,102,241,0.1)">⚖️</span> SWOT Snapshot</div>
+      <div id="swot-tags"></div>
+    </div>
+
+    <!-- LOCATION INTELLIGENCE MAP -->
+    <div class="card col-12 fade-up">
+      <div class="card-title">
+        <span class="card-icon" style="background:rgba(34,211,160,0.1)">🗺️</span>
+        Location Intelligence — Risk & Demand Map
+        <button class="btn-load-map" id="load-map-btn" onclick="loadLocationMap()">
+          📍 Load Map for This Location
+        </button>
+      </div>
+      
+      <div class="map-container" id="map-container">
+        <div class="map-loading">
+          <div style="text-align:center">
+            <div style="font-size:2rem;margin-bottom:8px">🗺️</div>
+            <div>Click "Load Map" to analyze this location's risk & demand</div>
+          </div>
+        </div>
+      </div>
+      
+      <div class="location-stats" id="location-stats" style="display:none">
+        <div class="location-stat">
+          <div class="stat-name">Location Score</div>
+          <div class="stat-value" id="loc-score">—</div>
+        </div>
+        <div class="location-stat">
+          <div class="stat-name">Nearby Competitors</div>
+          <div class="stat-value" id="loc-competitors">—</div>
+        </div>
+        <div class="location-stat">
+          <div class="stat-name">Business Density</div>
+          <div class="stat-value" id="loc-density">—</div>
+        </div>
+        <div class="location-stat">
+          <div class="stat-name">Crime Risk</div>
+          <div class="stat-value" id="loc-crime">—</div>
+        </div>
+        <div class="location-stat">
+          <div class="stat-name">Flood Risk</div>
+          <div class="stat-value" id="loc-flood">—</div>
+        </div>
+        <div class="location-stat">
+          <div class="stat-name">Traffic Risk</div>
+          <div class="stat-value" id="loc-traffic">—</div>
+        </div>
+      </div>
+    </div>
+
+
+    <!-- AI ACTION ITEMS -->
+    <div class="card col-12 fade-up">
+      <div class="card-title"><span class="card-icon" style="background:rgba(245,158,11,0.1)">✦</span> AI Action Plan — What To Do Next</div>
+      <ul class="insight-list" id="action-items"></ul>
+    </div>
+
+  </div>
+</div>
+
+</div><!-- wrap -->
+
+<script>
+
+
+
+// ——— STEP ANIMATOR ———
+let stepTimer;
+function animateSteps() {
+  let i = 0;
+  stepTimer = setInterval(() => {
+    if (i > 0) {
+      const prev = document.getElementById(`step-${i-1}`);
+      if (prev) { prev.classList.remove('active'); prev.classList.add('done'); prev.querySelector('.step-dot').textContent = ''; }
+    }
+    const cur = document.getElementById(`step-${i}`);
+    if (cur) cur.classList.add('active');
+    i++;
+    if (i > 5) clearInterval(stepTimer);
+  }, 900);
+}
+
+function clearSteps() {
+  clearInterval(stepTimer);
+  for (let i = 0; i < 6; i++) {
+    const el = document.getElementById(`step-${i}`);
+    if (el) { el.classList.remove('active','done'); }
+  }
+}
+
+// ——— SCORE ANIMATION ———
+function animateScore(target, color) {
+  const arc = document.getElementById('score-arc');
+  const display = document.getElementById('score-display');
+  const circumference = 2 * Math.PI * 58; // ~364.4
+  const fillAmt = (target / 100) * circumference;
+
+  // color
+  const colorClass = target >= 65 ? 'score-green' : target >= 40 ? 'score-yellow' : 'score-red';
+  const numClass = target >= 65 ? 'num-green' : target >= 40 ? 'num-yellow' : 'num-red';
+  arc.className = colorClass;
+  display.className = `num ${numClass}`;
+
+  setTimeout(() => {
+    arc.style.strokeDasharray = `${fillAmt} ${circumference}`;
+  }, 100);
+
+  let cur = 0;
+  const inc = target / 60;
+  const ti = setInterval(() => {
+    cur = Math.min(cur + inc, target);
+    display.textContent = Math.round(cur);
+    if (cur >= target) clearInterval(ti);
+  }, 25);
+}
+
+// ——— PROGRESS BAR ———
+function makeBar(label, value, color) {
+  const colorMap = { green: 'var(--green)', yellow: 'var(--yellow)', red: 'var(--red)', blue: 'var(--blue)', accent: 'var(--accent)' };
+  const c = colorMap[color] || color;
+  return `
+    <div class="bar-row">
+      <div class="bar-meta">
+        <span style="font-size:0.83rem;color:#c4c8d8">${label}</span>
+        <span style="font-size:0.78rem;color:var(--muted)">${value}%</span>
+      </div>
+      <div class="bar-track">
+        <div class="bar-fill" style="background:${c}" data-w="${value}"></div>
+      </div>
+    </div>`;
+}
+
+function animateBars() {
+  document.querySelectorAll('.bar-fill[data-w]').forEach(b => {
+    setTimeout(() => { b.style.width = b.getAttribute('data-w') + '%'; }, 200);
+  });
+}
+
+// ——— RENDER DASHBOARD ———
+function renderDashboard(d) {
+  // verdict pill
+  saveReportForTTS(d);
+  const pill = document.getElementById('verdict-pill');
+  const score = d.score || 50;
+  if (score >= 65) { pill.className = 'verdict-pill pill-green'; pill.textContent = '✦ ' + (d.verdict_label || 'Strong Opportunity'); }
+  else if (score >= 40) { pill.className = 'verdict-pill pill-yellow'; pill.textContent = '⚠ ' + (d.verdict_label || 'Moderate Potential'); }
+  else { pill.className = 'verdict-pill pill-red'; pill.textContent = '✕ ' + (d.verdict_label || 'High Risk'); }
+
+  document.getElementById('verdict-title').textContent = d.verdict_title || 'Intelligence Report';
+  document.getElementById('summary').textContent = d.summary || '';
+
+  // stats
+  document.getElementById('market-size').textContent = d.market_size || '—';
+  document.getElementById('growth-rate').textContent = d.growth_rate || '—';
+  document.getElementById('mrr').textContent = d.mrr_yr1 || '—';
+  document.getElementById('breakeven').textContent = d.breakeven || '—';
+
+  animateScore(score);
+
+  // risk bars
+  const risks = d.risks_breakdown || [];
+  document.getElementById('risk-bars').innerHTML = risks.map(r =>
+    makeBar(r.label, r.value, r.color)
+  ).join('');
+  if (d.risk_warning) {
+    const wb = document.getElementById('risk-warning');
+    wb.style.display = 'block';
+    wb.innerHTML = `⚠️ <strong style="color:var(--red)">${d.risk_warning_title || 'Critical Risk'}:</strong> ${d.risk_warning}`;
+  }
+
+  // market fit
+  const mf = d.market_fit || {};
+  document.getElementById('market-fit-content').innerHTML = `
+    <div style="font-family:'Syne',sans-serif;font-size:2.4rem;font-weight:800;color:var(--green);margin-bottom:4px">${mf.score || '—'}<span style="font-size:1rem;font-weight:400;color:var(--muted)">/10</span></div>
+    <p style="font-size:0.82rem;color:var(--muted);margin-bottom:16px">${mf.label || ''}</p>
+    <p class="section-content" style="margin-bottom:16px">${mf.description || ''}</p>
+    ${(mf.icp || []).map(i => `<div style="display:flex;align-items:center;gap:8px;padding:7px 0;border-bottom:1px solid var(--border);font-size:0.83rem;color:#c4c8d8"><span>${i.icon || '👤'}</span><span>${i.segment}</span><span style="margin-left:auto;font-weight:600;color:var(--accent)">${i.size}</span></div>`).join('')}
+  `;
+
+  // unit economics
+  const ue = d.unit_economics || {};
+  document.getElementById('unit-econ').innerHTML = `
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px">
+      ${[['CAC',ue.cac],['LTV',ue.ltv],['LTV:CAC',ue.ltv_cac],['Gross Margin',ue.gross_margin],['Payback',ue.payback],['Churn Est.',ue.churn]].map(([k,v])=>`
+        <div style="background:var(--surface2);border:1px solid var(--border);border-radius:10px;padding:10px 12px">
+          <div style="font-size:0.68rem;color:var(--muted);text-transform:uppercase;letter-spacing:.07em;font-weight:500">${k}</div>
+          <div style="font-family:'Syne',sans-serif;font-size:1.05rem;font-weight:700;margin-top:2px">${v||'—'}</div>
+        </div>`).join('')}
+    </div>
+    <p class="section-content" style="font-size:0.8rem">${ue.note||''}</p>
+  `;
+
+  // location
+  document.getElementById('location-content').innerHTML = `
+    <p style="margin-bottom:12px">${d.location_analysis || ''}</p>
+    ${(d.location_pros || []).map(p => `<div style="display:flex;gap:8px;margin-bottom:6px;font-size:0.83rem"><span style="color:var(--green)">✓</span><span style="color:#c4c8d8">${p}</span></div>`).join('')}
+    ${(d.location_cons || []).map(c => `<div style="display:flex;gap:8px;margin-bottom:6px;font-size:0.83rem"><span style="color:var(--red)">✕</span><span style="color:#c4c8d8">${c}</span></div>`).join('')}
+  `;
+
+  // competitors
+  const comps = d.competitors || [];
+  document.getElementById('comp-body').innerHTML = comps.map(c => `
+    <tr>
+      <td><strong>${c.name}</strong><br><span style="font-size:0.75rem;color:var(--muted)">${c.type||''}</span></td>
+      <td style="color:var(--red)">${c.weakness}</td>
+      <td style="color:var(--green)">${c.your_edge}</td>
+    </tr>`).join('');
+
+  // GTM milestones
+  const milestones = d.gtm_milestones || [];
+  document.getElementById('gtm-milestones').innerHTML = milestones.map(m => `
+    <div class="milestone-row">
+      <span class="milestone-time">${m.time}</span>
+      <div>
+        <div style="font-weight:500;margin-bottom:3px;font-size:0.88rem">${m.goal}</div>
+        <div style="font-size:0.78rem;color:var(--muted)">${m.action}</div>
+      </div>
+    </div>`).join('');
+
+  // funding
+  const fstages = d.funding_stages || [];
+  document.getElementById('funding-stages').innerHTML = fstages.map((f,i) => `
+    <div class="funding-stage ${f.current ? 'active' : ''}">
+      <div class="funding-dot" style="background:${f.current ? 'var(--accent)' : 'var(--muted)'}"></div>
+      <span class="funding-name">${f.stage}</span>
+      <span class="funding-amount">${f.amount}</span>
+      ${f.current ? '<span style="font-size:0.7rem;color:var(--accent);font-weight:600">← You are here</span>' : ''}
+    </div>`).join('');
+
+  // swot tags
+  const swot = d.swot || {};
+  const tagHTML = (items, cls) => (items||[]).map(t => `<span class="tag ${cls}">${t}</span>`).join('');
+  document.getElementById('swot-tags').innerHTML = `
+    <div style="margin-bottom:10px">
+      <div style="font-size:0.72rem;color:var(--green);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">✓ Strengths & Opportunities</div>
+      <div class="tag-cloud">${tagHTML(swot.strengths,'positive')}${tagHTML(swot.opportunities,'positive')}</div>
+    </div>
+    <div>
+      <div style="font-size:0.72rem;color:var(--red);font-weight:600;letter-spacing:.07em;text-transform:uppercase;margin-bottom:8px">✕ Weaknesses & Threats</div>
+      <div class="tag-cloud">${tagHTML(swot.weaknesses,'negative')}${tagHTML(swot.threats,'negative')}</div>
+    </div>
+  `;
+
+  // action items
+  const actions = d.action_items || [];
+  document.getElementById('action-items').innerHTML = actions.map((a,i) => `
+    <li class="insight-item">
+      <span class="insight-icon" style="font-size:1.1rem">${a.icon || '→'}</span>
+      <div>
+        <div style="font-weight:600;font-size:0.9rem;margin-bottom:3px">${a.title}</div>
+        <div style="font-size:0.82rem;color:var(--muted)">${a.detail}</div>
+      </div>
+      <span style="margin-left:auto;font-size:0.72rem;color:var(--accent);white-space:nowrap;font-weight:600">${a.priority || ''}</span>
+    </li>`).join('');
+}
+
+// ——— PDF EXPORT ———
+function exportPDF() {
+  // Direct browser navigation triggers download
+  window.location.href = "{% url 'export_pdf' %}";
+}
+
+// ——— TEXT-TO-SPEECH (TTS) ———
+// ——— TEXT-TO-SPEECH (TTS) ———
+let currentUtterance = null;
+let ttsActive = false;
+let ttsQueue = [];
+let currentReport = null;
+let ttsSections = [];  // ✅ NEW: track current queue
+
+function saveReportForTTS(data) {
+  currentReport = data;
+  console.log('✅ Report saved for TTS');
+}
+
+function toggleFullReport() {
+  if (ttsActive) {
+    stopSpeaking();
+    return;
+  }
+  if (!currentReport) {
+    alert('❌ No report to read. Please run an analysis first.');
+    return;
+  }
+  speakFullReport();
+}
+
+function speakFullReport() {
+  stopSpeaking(); // clear any previous
+
+  const data = currentReport;
+  ttsSections = [];  // ✅ reset queue
+
+  // Build a comprehensive spoken report
+  ttsSections.push(`Startup Analysis Report.`);
+  ttsSections.push(`Viability Score: ${data.score} out of 100.`);
+  ttsSections.push(`Verdict: ${data.verdict_label || 'Analysis complete'}.`);
+  if (data.verdict_title) ttsSections.push(`${data.verdict_title}.`);
+  ttsSections.push(``);
+  ttsSections.push(`Executive Summary. ${data.summary || 'No summary available.'}`);
+  ttsSections.push(``);
+
+  // Market stats
+  if (data.market_size) ttsSections.push(`Market Size: ${data.market_size}.`);
+  if (data.growth_rate) ttsSections.push(`Growth Rate: ${data.growth_rate}.`);
+  if (data.mrr_yr1) ttsSections.push(`Estimated Monthly Recurring Revenue in Year 1: ${data.mrr_yr1}.`);
+  if (data.breakeven) ttsSections.push(`Breakeven Timeline: ${data.breakeven}.`);
+  ttsSections.push(``);
+
+  // Market fit
+  if (data.market_fit) {
+    const mf = data.market_fit;
+    ttsSections.push(`Market Fit Score: ${mf.score || 'N/A'} out of 10. ${mf.label || ''}.`);
+    if (mf.description) ttsSections.push(`${mf.description}`);
+    if (mf.icp && mf.icp.length) {
+      ttsSections.push(`Key customer segments include:`);
+      mf.icp.forEach(i => {
+        ttsSections.push(`${i.segment}, representing ${i.size} of the market.`);
+      });
+    }
+    ttsSections.push(``);
+  }
+
+  // Risk profile
+  if (data.risks_breakdown && data.risks_breakdown.length) {
+    ttsSections.push(`Risk Profile:`);
+    data.risks_breakdown.forEach(r => {
+      const level = r.value >= 60 ? 'high' : r.value >= 30 ? 'moderate' : 'low';
+      ttsSections.push(`${r.label}: ${r.value} percent, which is ${level}.`);
+    });
+    if (data.risk_warning) {
+      ttsSections.push(`Critical warning: ${data.risk_warning_title || 'Risk identified'}. ${data.risk_warning}`);
+    }
+    ttsSections.push(``);
+  }
+
+  // Unit economics
+  if (data.unit_economics) {
+    const ue = data.unit_economics;
+    ttsSections.push(`Unit Economics:`);
+    if (ue.cac) ttsSections.push(`Customer Acquisition Cost: ${ue.cac}.`);
+    if (ue.ltv) ttsSections.push(`Lifetime Value: ${ue.ltv}.`);
+    if (ue.ltv_cac) ttsSections.push(`LTV to CAC ratio: ${ue.ltv_cac}.`);
+    if (ue.gross_margin) ttsSections.push(`Gross Margin: ${ue.gross_margin}.`);
+    if (ue.payback) ttsSections.push(`Payback Period: ${ue.payback}.`);
+    if (ue.churn) ttsSections.push(`Estimated Churn: ${ue.churn}.`);
+    if (ue.note) ttsSections.push(`${ue.note}`);
+    ttsSections.push(``);
+  }
+
+  // Location
+  if (data.location_analysis) {
+    ttsSections.push(`Location Feasibility. ${data.location_analysis}`);
+    if (data.location_pros && data.location_pros.length) {
+      ttsSections.push(`Advantages: ${data.location_pros.join('. ')}.`);
+    }
+    if (data.location_cons && data.location_cons.length) {
+      ttsSections.push(`Challenges: ${data.location_cons.join('. ')}.`);
+    }
+    ttsSections.push(``);
+  }
+
+  // Competitors
+  if (data.competitors && data.competitors.length) {
+    ttsSections.push(`Competitor Landscape. We identified ${data.competitors.length} key competitors:`);
+    data.competitors.forEach((c, i) => {
+      ttsSections.push(`Number ${i + 1}: ${c.name}. Their weakness: ${c.weakness}. Your competitive edge: ${c.your_edge}.`);
+    });
+    ttsSections.push(``);
+  }
+
+  // GTM
+  if (data.gtm_milestones && data.gtm_milestones.length) {
+    ttsSections.push(`Go to Market Roadmap:`);
+    data.gtm_milestones.forEach(m => {
+      ttsSections.push(`At ${m.time}: ${m.goal}. Action item: ${m.action}.`);
+    });
+    ttsSections.push(``);
+  }
+
+  // SWOT
+  if (data.swot) {
+    const swot = data.swot;
+    ttsSections.push(`SWOT Analysis:`);
+    if (swot.strengths && swot.strengths.length) ttsSections.push(`Strengths: ${swot.strengths.join(', ')}.`);
+    if (swot.weaknesses && swot.weaknesses.length) ttsSections.push(`Weaknesses: ${swot.weaknesses.join(', ')}.`);
+    if (swot.opportunities && swot.opportunities.length) ttsSections.push(`Opportunities: ${swot.opportunities.join(', ')}.`);
+    if (swot.threats && swot.threats.length) ttsSections.push(`Threats: ${swot.threats.join(', ')}.`);
+    ttsSections.push(``);
+  }
+
+  // Action items
+  if (data.action_items && data.action_items.length) {
+    ttsSections.push(`Recommended Action Items:`);
+    data.action_items.forEach((a, i) => {
+      ttsSections.push(`Priority ${a.priority || 'P2'}. ${a.title}. ${a.detail}`);
+    });
+    ttsSections.push(``);
+  }
+
+  ttsSections.push(`End of report. Good luck with your startup!`);
+
+  // ✅ FIX 2: Set ttsActive to true BEFORE starting
+  ttsActive = true;
+
+  // ✅ FIX 3 & 4: Update UI buttons
+  const btn = document.getElementById('tts-toggle-btn');
+  const stopBtn = document.getElementById('stop-tts-btn');
+  if (btn) {
+    btn.classList.add('speaking');
+    btn.innerHTML = '🔊 Speaking...';
+  }
+  if (stopBtn) stopBtn.style.display = 'inline-block';
+
+  // Start speaking
+  speakQueue();
+}
+
+function speakQueue() {
+  if (!ttsActive || ttsSections.length === 0) {
+    stopSpeaking();
+    return;
+  }
+
+  const text = ttsSections.shift();
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-IN';
+  utter.rate = 0.95;
+  utter.pitch = 1;
+  utter.volume = 1;
+
+  utter.onend = () => {
+    if (ttsActive && ttsSections.length > 0) {
+      // Small pause between sections
+      setTimeout(speakQueue, 300);
+    } else {
+      stopSpeaking();
+    }
+  };
+
+  utter.onerror = (e) => {
+    console.error('TTS error:', e);
+    if (e.error !== 'canceled' && e.error !== 'interrupted') {
+      stopSpeaking();
+    }
+  };
+
+  currentUtterance = utter;
+  speechSynthesis.speak(utter);
+}
+
+function stopSpeaking() {
+  ttsActive = false;
+  ttsSections = [];
+  if (speechSynthesis.speaking || speechSynthesis.pending) {
+    speechSynthesis.cancel();
+  }
+  currentUtterance = null;
+
+  // Update UI
+  const btn = document.getElementById('tts-toggle-btn');
+  const stopBtn = document.getElementById('stop-tts-btn');
+  if (btn) {
+    btn.classList.remove('speaking');
+    btn.innerHTML = '🔊 Read Full Report';
+  }
+  if (stopBtn) stopBtn.style.display = 'none';
+}
+
+// ——— INDIVIDUAL TEXT LISTEN ———
+function speakText(text, btn) {
+  if (!text || !text.trim()) {
+    alert('Nothing to read');
+    return;
+  }
+
+  // Stop if already speaking
+  if (speechSynthesis.speaking) {
+    speechSynthesis.cancel();
+    document.querySelectorAll('.btn-listen.speaking').forEach(b => {
+      b.classList.remove('speaking');
+      b.innerHTML = '🔊 Listen';
+    });
+    // If user clicked the same button, just stop
+    if (btn && btn.classList.contains('speaking')) {
+      return;
+    }
+  }
+
+  const utter = new SpeechSynthesisUtterance(text);
+  utter.lang = 'en-IN';
+  utter.rate = 0.95;
+  utter.pitch = 1;
+
+  utter.onstart = () => {
+    if (btn) {
+      btn.classList.add('speaking');
+      btn.innerHTML = '⏸ Stop';
+    }
+  };
+
+  utter.onend = () => {
+    if (btn) {
+      btn.classList.remove('speaking');
+      btn.innerHTML = '🔊 Listen';
+    }
+  };
+
+  utter.onerror = () => {
+    if (btn) {
+      btn.classList.remove('speaking');
+      btn.innerHTML = '🔊 Listen';
+    }
+  };
+
+  speechSynthesis.speak(utter);
+}
+
+
+// ——— VOICE INPUT ———
+let recognition = null;
+let isListening = false;
+let finalTranscript = '';
+
+function toggleMic() {
+  const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+
+  if (!SpeechRecognition) {
+    alert('❌ Speech Recognition is not supported in this browser. Please use Chrome or Edge.');
+    return;
+  }
+
+  // If currently listening → stop
+  if (isListening) {
+    stopMic();
+    return;
+  }
+
+  // Create recognition object on first use
+  if (!recognition) {
+    recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN';
+    recognition.continuous = true;
+    recognition.interimResults = true;
+    recognition.maxAlternatives = 1;
+
+    recognition.onresult = (event) => {
+      let interimTranscript = '';
+
+      // ✅ FIX: iterate from 0 to capture all results
+      for (let i = 0; i < event.results.length; i++) {
+        const transcript = event.results[i][0].transcript;
+        if (event.results[i].isFinal) {
+          finalTranscript += transcript + ' ';
+        } else {
+          interimTranscript += transcript;
+        }
+      }
+
+      // ✅ Update textarea with both final + interim
+      const textarea = document.getElementById('idea');
+      textarea.value = (finalTranscript + interimTranscript).trim();
+      textarea.dispatchEvent(new Event('input'));
+    };
+
+    recognition.onerror = (event) => {
+      console.error('Speech recognition error:', event.error);
+      if (event.error === 'no-speech') {
+        alert('No speech detected. Please try again.');
+      } else if (event.error === 'not-allowed') {
+        alert('Microphone access denied. Please allow microphone in browser settings.');
+        stopMic();
+      }
+    };
+
+    recognition.onend = () => {
+      // ✅ Auto-restart only if user hasn't manually stopped
+      if (isListening) {
+        try {
+          recognition.start();
+        } catch (e) {
+          console.log('Restart failed:', e);
+          stopMic();
+        }
+      }
+    };
+  }
+
+  // Start listening
+  try {
+    finalTranscript = '';
+    recognition.start();
+    isListening = true;
+    updateMicButton(true);
+    console.log('🎤 Listening started...');
+  } catch (e) {
+    console.error('Start failed:', e);
+    // If already started, just update UI
+    isListening = true;
+    updateMicButton(true);
+  }
+}
+
+function stopMic() {
+  isListening = false;
+  if (recognition) {
+    try {
+      recognition.stop();
+    } catch (e) {
+      console.log('Stop failed:', e);
+    }
+  }
+  updateMicButton(false);
+  console.log('🎤 Listening stopped');
+}
+
+function updateMicButton(listening) {
+  const btn = document.getElementById('mic-btn');
+  if (listening) {
+    btn.classList.add('listening');
+    btn.innerHTML = '🔴 Listening... Click to Stop';
+  } else {
+    btn.classList.remove('listening');
+    btn.innerHTML = '🎤 Voice Input';
+  }
+}
+
+
+let uploadedImages = [];
+
+function handleImageUpload(event) {
+  const files = Array.from(event.target.files);
+  files.forEach(file => {
+    if (!file.type.startsWith('image/')) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      uploadedImages.push({ name: file.name, data: e.target.result });
+      renderImagePreviews();
+    };
+    reader.readAsDataURL(file);
+  });
+}
+
+function renderImagePreviews() {
+  const container = document.getElementById('image-preview');
+  container.innerHTML = uploadedImages.map((img, i) => `
+    <div class="img-thumb-wrap">
+      <img src="${img.data}" class="img-thumb" title="${img.name}">
+      <button class="img-remove" onclick="removeImage(${i})">×</button>
+    </div>
+  `).join('');
+}
+
+function removeImage(i) {
+  uploadedImages.splice(i, 1);
+  renderImagePreviews();
+}
+
+
+function getCookie(name) {
+  let cookieValue = null;
+
+  if (document.cookie && document.cookie !== '') {
+    const cookies = document.cookie.split(';');
+
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i].trim();
+
+      if (cookie.substring(0, name.length + 1) === (name + '=')) {
+        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+        break;
+      }
+    }
+  }
+
+  return cookieValue;
+}
+// ——— MAIN FUNCTION ———
+async function runValidation() {
+  const idea = document.getElementById('idea').value.trim();
+  if (!idea) { alert('Please enter your startup idea!'); return; }
+
+  const location = document.getElementById('location').value.trim() || 'India';
+  const industry = document.getElementById('industry').value || 'Other';
+  const stage = document.getElementById('stage').value;
+  const budget = document.getElementById('budget').value;
+
+  // show loading
+  document.getElementById('input-section').style.display = 'none';
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('loading-state').style.display = 'block';
+  clearSteps();
+  animateSteps();
+
+//   const systemPrompt = `You are ValidatorAI, an expert startup analyst with deep knowledge of Indian and global startup ecosystems, venture capital, market research, and entrepreneurship. You analyze startup ideas with real-world data and return ONLY a valid JSON object — no markdown, no explanation, no preamble.
+
+// Analyze the given startup idea and return a comprehensive JSON with this EXACT structure:
+// {
+//   "score": <integer 0-100 overall viability>,
+//   "verdict_label": <short label like "Strong Opportunity" | "Moderate Potential" | "High Risk">,
+//   "verdict_title": <catchy 5-8 word title for this report>,
+//   "summary": <2-3 sentence executive summary of the idea and its potential>,
+//   "market_size": <e.g. "₹4,200 Cr TAM">,
+//   "growth_rate": <e.g. "+28% CAGR">,
+//   "mrr_yr1": <realistic Year 1 MRR estimate e.g. "₹3L–8L/mo">,
+//   "breakeven": <e.g. "14–18 months">,
+//   "risks_breakdown": [
+//     {"label": "Execution Risk", "value": <0-100>, "color": <"green"|"yellow"|"red">},
+//     {"label": "Technical Risk", "value": <0-100>, "color": <"green"|"yellow"|"red">},
+//     {"label": "Market Adoption Risk", "value": <0-100>, "color": <"green"|"yellow"|"red">},
+//     {"label": "Regulatory Risk", "value": <0-100>, "color": <"green"|"yellow"|"red">},
+//     {"label": "Funding Risk", "value": <0-100>, "color": <"green"|"yellow"|"red">}
+//   ],
+//   "risk_warning": <most critical risk in 1-2 sentences or null>,
+//   "risk_warning_title": <short title for the warning e.g. "CAC Challenge">,
+//   "market_fit": {
+//     "score": <integer 1-10>,
+//     "label": <e.g. "Strong PMF Indicators">,
+//     "description": <2 sentences on market fit>,
+//     "icp": [
+//       {"icon": "🏪", "segment": <customer segment name>, "size": <e.g. "40% of TAM">},
+//       {"icon": "👩‍💼", "segment": <segment 2>, "size": <size>},
+//       {"icon": "🏢", "segment": <segment 3>, "size": <size>}
+//     ]
+//   },
+//   "unit_economics": {
+//     "cac": <e.g. "₹2,400">,
+//     "ltv": <e.g. "₹18,000">,
+//     "ltv_cac": <e.g. "7.5x">,
+//     "gross_margin": <e.g. "68%">,
+//     "payback": <e.g. "4 months">,
+//     "churn": <e.g. "~5%/mo">,
+//     "note": <1 sentence on economics health>
+//   },
+//   "location_analysis": <2 sentences specific to the location provided>,
+//   "location_pros": [<pro 1>, <pro 2>, <pro 3>],
+//   "location_cons": [<con 1>, <con 2>],
+//   "competitors": [
+//     {"name": <competitor name>, "type": <Indian/Global/Direct>, "weakness": <their key weakness>, "your_edge": <how you can beat them>},
+//     {"name": <competitor 2>, "type": ..., "weakness": ..., "your_edge": ...},
+//     {"name": <competitor 3>, "type": ..., "weakness": ..., "your_edge": ...},
+//     {"name": <competitor 4>, "type": ..., "weakness": ..., "your_edge": ...}
+//   ],
+//   "gtm_milestones": [
+//     {"time": "Month 1-2", "goal": <milestone goal>, "action": <specific action to take>},
+//     {"time": "Month 3-4", "goal": ..., "action": ...},
+//     {"time": "Month 5-6", "goal": ..., "action": ...},
+//     {"time": "Month 7-9", "goal": ..., "action": ...},
+//     {"time": "Month 10-12", "goal": ..., "action": ...}
+//   ],
+//   "funding_stages": [
+//     {"stage": "Bootstrapped", "amount": "₹0–25L", "current": <true if budget matches>},
+//     {"stage": "Pre-Seed", "amount": "₹25L–1Cr", "current": <true if applicable>},
+//     {"stage": "Seed Round", "amount": "₹1Cr–5Cr", "current": false},
+//     {"stage": "Series A", "amount": "₹10Cr+", "current": false}
+//   ],
+//   "swot": {
+//     "strengths": [<3-4 short strength tags>],
+//     "weaknesses": [<2-3 short weakness tags>],
+//     "opportunities": [<3-4 short opportunity tags>],
+//     "threats": [<2-3 short threat tags>]
+//   },
+//   "action_items": [
+//     {"icon": "🎯", "title": <action title>, "detail": <specific actionable advice>, "priority": <"P0 – Urgent"|"P1 – This Week"|"P2 – This Month">},
+//     {"icon": "💬", "title": ..., "detail": ..., "priority": ...},
+//     {"icon": "🔧", "title": ..., "detail": ..., "priority": ...},
+//     {"icon": "📣", "title": ..., "detail": ..., "priority": ...},
+//     {"icon": "💰", "title": ..., "detail": ..., "priority": ...}
+//   ]
+// }
+
+// Be specific, realistic, and use India-appropriate numbers (₹) where relevant. Base your analysis on real market knowledge. All numbers should be grounded in realistic assumptions for the given industry and location.`;
+
+//   const userPrompt = `Startup Idea: ${idea}
+// Location: ${location}
+// Industry: ${industry}
+// Current Stage: ${stage}
+// Budget: ${budget}
+
+// Return ONLY the JSON. No explanation, no markdown code fences.`;
+
+  try {
+    const resp = await fetch("{% url 'ask_gemini' %}", {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'X-CSRFToken': getCookie('csrftoken')
+      },
+      credentials: 'same-origin',
+      body: JSON.stringify({
+        idea,
+        location,
+        industry,
+        stage,
+        budget,
+        images: uploadedImages 
+      })
+    });
+
+    const data = await resp.json();
+
+    if (!resp.ok || data.error) {
+      throw new Error(data.error || 'AI request failed');
+    }
+    // show dashboard
+    clearSteps();
+    document.getElementById('loading-state').style.display = 'none';
+    document.getElementById('dashboard').style.display = 'block';
+
+    renderDashboard(data);
+
+    setTimeout(animateBars, 300);
+
+  } catch (err) {
+    clearSteps();
+    document.getElementById('loading-state').style.display = 'none';
+    const errBox = document.getElementById('error-box');
+    errBox.style.display = 'block';
+    document.getElementById('error-msg').textContent = `Analysis failed: ${err.message}. Please try again.`;
+    console.error(err);
+  }
+}
+
+function resetForm() {
+  document.getElementById('dashboard').style.display = 'none';
+  document.getElementById('error-box').style.display = 'none';
+  document.getElementById('input-section').style.display = 'block';
+  document.getElementById('idea').value = '';
+}
+
+
+// ——— LOCATION MAP ———
+let map = null;
+let markers = [];
+
+async function loadLocationMap() {
+  const location = document.getElementById('location').value.trim();
+  const industry = document.getElementById('industry').value || 'business';
+  
+  if (!location) {
+    alert('Please enter a location in the form first!');
+    return;
+  }
+  
+  const btn = document.getElementById('load-map-btn');
+  btn.disabled = true;
+  btn.innerHTML = '⏳ Loading map...';
+  
+  document.getElementById('map-container').innerHTML = `
+    <div class="map-loading">
+      <div style="text-align:center">
+        <div class="loader-ring" style="width:40px;height:40px;margin:0 auto 12px"></div>
+        <div>Analyzing ${location}...</div>
+      </div>
+    </div>
+  `;
+  
+  try {
+    const resp = await fetch(`{% url 'location_intel' %}?location=${encodeURIComponent(location)}&industry=${encodeURIComponent(industry)}`, {
+      headers: { 'X-CSRFToken': getCookie('csrftoken') },
+      credentials: 'same-origin'
+    });
+    
+    if (!resp.ok) {
+      const err = await resp.json();
+      throw new Error(err.error || 'Failed to load location data');
+    }
+    
+    const data = await resp.json();
+    
+    // Update stats
+    document.getElementById('loc-score').textContent = data.location_score + '/100';
+    document.getElementById('loc-score').className = 'stat-value ' + 
+      (data.location_score >= 65 ? 'stat-high' : data.location_score >= 40 ? 'stat-mid' : 'stat-low');
+    
+    document.getElementById('loc-competitors').textContent = data.nearby_count;
+    document.getElementById('loc-density').textContent = Math.round(data.demand_indicators.business_density) + '%';
+    document.getElementById('loc-crime').textContent = data.risk_factors.crime_risk + '%';
+    document.getElementById('loc-flood').textContent = data.risk_factors.flood_risk + '%';
+    document.getElementById('loc-traffic').textContent = data.risk_factors.traffic_risk + '%';
+    
+    // Color-code risk values
+    ['loc-crime', 'loc-flood', 'loc-traffic'].forEach(id => {
+      const val = parseInt(document.getElementById(id).textContent);
+      document.getElementById(id).className = 'stat-value ' +
+        (val >= 60 ? 'stat-high' : val >= 30 ? 'stat-mid' : 'stat-low');
+    });
+    
+    document.getElementById('location-stats').style.display = 'grid';
+    
+    // Initialize map
+    initMap(data);
+    
+  } catch (err) {
+    document.getElementById('map-container').innerHTML = `
+      <div class="map-loading">
+        <div style="text-align:center;color:var(--red)">
+          <div style="font-size:2rem;margin-bottom:8px">⚠️</div>
+          <div>${err.message}</div>
+        </div>
+      </div>
+    `;
+    console.error(err);
+  } finally {
+    btn.disabled = false;
+    btn.innerHTML = '🔄 Refresh Map';
+  }
+}
+
+function initMap(data) {
+  const center = data.map_config.center;
+  const hasGoogleKey = data.map_config.has_google_key;
+  
+  // Use OpenStreetMap with Leaflet (free, no API key)
+  // Load Leaflet CSS + JS dynamically
+  if (!document.getElementById('leaflet-css')) {
+    const link = document.createElement('link');
+    link.id = 'leaflet-css';
+    link.rel = 'stylesheet';
+    link.href = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.css';
+    document.head.appendChild(link);
+    
+    const script = document.createElement('script');
+    script.id = 'leaflet-js';
+    script.src = 'https://unpkg.com/leaflet@1.9.4/dist/leaflet.js';
+    document.head.appendChild(script);
+    
+    script.onload = () => renderLeafletMap(center, data);
+  } else {
+    renderLeafletMap(center, data);
+  }
+}
+
+function renderLeafletMap(center, data) {
+  document.getElementById('map-container').innerHTML = '<div id="map" style="width:100%;height:100%"></div>';
+  
+  if (map) {
+    map.remove();
+  }
+  
+  map = L.map('map').setView([center.lat, center.lng], 14);
+  
+  // OpenStreetMap tiles (free)
+  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+    attribution: '© OpenStreetMap contributors',
+    maxZoom: 19
+  }).addTo(map);
+  
+  // Main marker (your location)
+  const mainIcon = L.divIcon({
+    html: '<div style="background:#6366f1;width:24px;height:24px;border-radius:50%;border:3px solid white;box-shadow:0 0 0 3px rgba(99,102,241,0.4);display:flex;align-items:center;justify-content:center;color:white;font-weight:bold">★</div>',
+    iconSize: [24, 24],
+    className: ''
+  });
+  
+  L.marker([center.lat, center.lng], { icon: mainIcon })
+    .addTo(map)
+    .bindPopup(`<b>${data.location.formatted_address}</b><br>📍 Your target location`)
+    .openPopup();
+  
+  // Risk circle (red = high risk, green = low risk)
+  const riskColor = data.location_score >= 65 ? '#22d3a0' : data.location_score >= 40 ? '#f59e0b' : '#f43f5e';
+  L.circle([center.lat, center.lng], {
+    color: riskColor,
+    fillColor: riskColor,
+    fillOpacity: 0.15,
+    radius: 1500
+  }).addTo(map).bindPopup(`Risk Zone<br>Score: ${data.location_score}/100`);
+  
+  // Competitor markers
+  markers = [];
+  data.nearby_places.forEach(place => {
+    if (place.lat && place.lng) {
+      const competitorIcon = L.divIcon({
+        html: '<div style="background:#f43f5e;width:18px;height:18px;border-radius:50%;border:2px solid white;box-shadow:0 0 0 2px rgba(244,63,94,0.3)"></div>',
+        iconSize: [18, 18],
+        className: ''
+      });
+      
+      const marker = L.marker([place.lat, place.lng], { icon: competitorIcon })
+        .addTo(map)
+        .bindPopup(`<b>${place.name}</b><br>${place.vicinity || 'Nearby'}<br><small>Source: ${place.source}</small>`);
+      
+      markers.push(marker);
+    }
+  });
+  
+  // Fit bounds to show everything
+  if (markers.length > 0) {
+    const group = L.featureGroup([L.marker([center.lat, center.lng]), ...markers]);
+    map.fitBounds(group.getBounds().pad(0.2));
+  }
+}
+
+</script>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 </body>
 </html>

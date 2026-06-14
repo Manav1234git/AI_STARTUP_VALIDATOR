@@ -1,0 +1,1093 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demo - AI Startup Ideas | ValidateAI</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #6C63FF;
+            --primary-dark: #4A42D4;
+            --secondary: #FF6584;
+            --accent: #00D9A3;
+            --warning: #FFB800;
+            --dark: #0A0E27;
+            --darker: #060818;
+            --light: #ffffff;
+            --gray: #8B8B9E;
+            --card-bg: rgba(255, 255, 255, 0.05);
+            --border: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background: var(--darker);
+            color: var(--light);
+            overflow-x: hidden;
+            line-height: 1.6;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: radial-gradient(circle at 20% 50%, rgba(108, 99, 255, 0.15) 0%, transparent 50%),
+                        radial-gradient(circle at 80% 80%, rgba(255, 101, 132, 0.1) 0%, transparent 50%),
+                        radial-gradient(circle at 50% 20%, rgba(0, 217, 163, 0.08) 0%, transparent 50%);
+            animation: rotate 30s linear infinite;
+        }
+
+        @keyframes rotate {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Navbar */
+        .navbar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            padding: 15px 5%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            z-index: 1000;
+            backdrop-filter: blur(20px);
+            background: rgba(10, 14, 39, 0.7);
+            border-bottom: 1px solid var(--border);
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 22px;
+            font-weight: 800;
+            font-family: 'Space Grotesk', sans-serif;
+            text-decoration: none;
+            color: white;
+        }
+
+        .logo-icon {
+            width: 38px;
+            height: 38px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 18px;
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(108, 99, 255, 0.7); }
+            50% { transform: scale(1.05); box-shadow: 0 0 0 10px rgba(108, 99, 255, 0); }
+        }
+
+        .back-btn {
+            padding: 10px 20px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            color: white;
+            text-decoration: none;
+            font-size: 14px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+
+        .back-btn:hover {
+            background: rgba(255, 255, 255, 0.15);
+            border-color: var(--primary);
+            transform: translateX(-3px);
+        }
+
+        /* Hero */
+        .hero {
+            padding: 140px 5% 60px;
+            text-align: center;
+        }
+
+        .hero-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 16px;
+            background: rgba(108, 99, 255, 0.1);
+            border: 1px solid rgba(108, 99, 255, 0.3);
+            border-radius: 100px;
+            font-size: 14px;
+            color: var(--primary);
+            margin-bottom: 25px;
+        }
+
+        .hero h1 {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: clamp(2.2rem, 6vw, 4.5rem);
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+        }
+
+        .hero h1 .gradient-text {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--secondary) 50%, var(--accent) 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            background-size: 200% auto;
+            animation: gradient 3s ease infinite;
+        }
+
+        @keyframes gradient {
+            0%, 100% { background-position: 0% 50%; }
+            50% { background-position: 100% 50%; }
+        }
+
+        .hero p {
+            font-size: 1.1rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 30px;
+        }
+
+        /* Search & Filter */
+        .search-filter-section {
+            max-width: 1200px;
+            margin: 40px auto 60px;
+            padding: 0 5%;
+        }
+
+        .search-box {
+            position: relative;
+            max-width: 600px;
+            margin: 0 auto 30px;
+        }
+
+        .search-box input {
+            width: 100%;
+            padding: 18px 20px 18px 55px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 15px;
+            color: white;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            outline: none;
+            transition: all 0.3s ease;
+        }
+
+        .search-box input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(108, 99, 255, 0.1);
+        }
+
+        .search-box i {
+            position: absolute;
+            left: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: var(--gray);
+            font-size: 18px;
+        }
+
+        .filters {
+            display: flex;
+            gap: 12px;
+            justify-content: center;
+            flex-wrap: wrap;
+        }
+
+        .filter-btn {
+            padding: 10px 20px;
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 100px;
+            color: var(--gray);
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .filter-btn:hover {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+
+        .filter-btn.active {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+            border-color: var(--primary);
+        }
+
+        /* Ideas Grid */
+        .ideas-section {
+            padding: 0 5% 80px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+
+        .section-title {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+
+        .ideas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        .idea-card {
+            background: var(--card-bg);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            padding: 30px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+            backdrop-filter: blur(10px);
+        }
+
+        .idea-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 3px;
+            background: linear-gradient(90deg, var(--primary), var(--secondary));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.4s ease;
+        }
+
+        .idea-card:hover {
+            transform: translateY(-8px);
+            border-color: rgba(108, 99, 255, 0.3);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .idea-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .idea-header {
+            display: flex;
+            align-items: flex-start;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .idea-icon {
+            width: 55px;
+            height: 55px;
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            border-radius: 15px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            color: white;
+            flex-shrink: 0;
+        }
+
+        .idea-title-section {
+            flex: 1;
+        }
+
+        .idea-title {
+            font-size: 1.3rem;
+            font-weight: 700;
+            margin-bottom: 5px;
+            line-height: 1.3;
+        }
+
+        .idea-category {
+            display: inline-block;
+            padding: 4px 10px;
+            background: rgba(108, 99, 255, 0.15);
+            border-radius: 100px;
+            color: var(--primary);
+            font-size: 11px;
+            font-weight: 500;
+        }
+
+        .idea-category.health { background: rgba(0, 217, 163, 0.15); color: var(--accent); }
+        .idea-category.finance { background: rgba(255, 184, 0, 0.15); color: var(--warning); }
+        .idea-category.education { background: rgba(255, 101, 132, 0.15); color: var(--secondary); }
+        .idea-category.ecommerce { background: rgba(108, 99, 255, 0.15); color: var(--primary); }
+
+        .idea-description {
+            color: var(--gray);
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .idea-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 12px;
+            margin-bottom: 20px;
+            padding: 15px;
+            background: rgba(0, 0, 0, 0.2);
+            border-radius: 12px;
+        }
+
+        .stat {
+            text-align: center;
+        }
+
+        .stat-value {
+            font-family: 'Space Grotesk', sans-serif;
+            font-size: 1.1rem;
+            font-weight: 700;
+            color: var(--accent);
+        }
+
+        .stat-label {
+            font-size: 11px;
+            color: var(--gray);
+            margin-top: 2px;
+        }
+
+        .idea-features {
+            margin-bottom: 20px;
+        }
+
+        .feature-tag {
+            display: inline-block;
+            padding: 5px 10px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 8px;
+            color: var(--gray);
+            font-size: 12px;
+            margin: 3px;
+        }
+
+        .idea-footer {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .view-btn {
+            flex: 1;
+            padding: 12px;
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            border: none;
+            border-radius: 10px;
+            color: white;
+            font-family: 'Poppins', sans-serif;
+            font-size: 14px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 6px;
+        }
+
+        .view-btn:hover {
+            box-shadow: 0 5px 20px rgba(108, 99, 255, 0.4);
+            transform: translateY(-2px);
+        }
+
+        .like-btn {
+            width: 45px;
+            height: 45px;
+            background: rgba(255, 255, 255, 0.1);
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            color: var(--gray);
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .like-btn:hover, .like-btn.liked {
+            background: rgba(255, 101, 132, 0.2);
+            color: var(--secondary);
+            border-color: var(--secondary);
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.85);
+            z-index: 2000;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            overflow-y: auto;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--dark);
+            border: 1px solid var(--border);
+            border-radius: 20px;
+            max-width: 700px;
+            width: 100%;
+            max-height: 90vh;
+            overflow-y: auto;
+            position: relative;
+        }
+
+        .modal-header {
+            padding: 30px;
+            border-bottom: 1px solid var(--border);
+            position: sticky;
+            top: 0;
+            background: var(--dark);
+            z-index: 1;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            width: 35px;
+            height: 35px;
+            background: rgba(255, 255, 255, 0.1);
+            border: none;
+            border-radius: 10px;
+            color: white;
+            cursor: pointer;
+            font-size: 18px;
+            transition: all 0.3s ease;
+        }
+
+        .close-modal:hover {
+            background: var(--secondary);
+        }
+
+        .modal-body {
+            padding: 30px;
+        }
+
+        .modal-section {
+            margin-bottom: 25px;
+        }
+
+        .modal-section h3 {
+            font-size: 1.1rem;
+            margin-bottom: 12px;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .modal-section p, .modal-section li {
+            color: var(--gray);
+            font-size: 0.95rem;
+            line-height: 1.7;
+        }
+
+        .modal-section ul {
+            padding-left: 20px;
+        }
+
+        .modal-section li {
+            margin-bottom: 8px;
+        }
+
+        .validation-score {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 20px;
+            background: rgba(0, 217, 163, 0.1);
+            border: 1px solid rgba(0, 217, 163, 0.3);
+            border-radius: 12px;
+            margin-bottom: 20px;
+        }
+
+        .score-circle {
+            width: 80px;
+            height: 80px;
+            background: linear-gradient(135deg, var(--accent), #00B386);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.8rem;
+            font-weight: 800;
+            color: white;
+            font-family: 'Space Grotesk', sans-serif;
+        }
+
+        .score-info h4 {
+            font-size: 1.2rem;
+            margin-bottom: 5px;
+        }
+
+        .score-info p {
+            color: var(--gray);
+            font-size: 0.9rem;
+        }
+
+        .modal-footer {
+            padding: 20px 30px;
+            border-top: 1px solid var(--border);
+            display: flex;
+            gap: 12px;
+        }
+
+        .modal-btn {
+            flex: 1;
+            padding: 14px;
+            border: none;
+            border-radius: 10px;
+            font-family: 'Poppins', sans-serif;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .modal-btn.primary {
+            background: linear-gradient(135deg, var(--primary), var(--primary-dark));
+            color: white;
+        }
+
+        .modal-btn.secondary {
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+            border: 1px solid var(--border);
+        }
+
+        /* Toast */
+        .toast {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--dark);
+            border: 1px solid var(--accent);
+            border-radius: 12px;
+            padding: 15px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            color: white;
+            z-index: 3000;
+            opacity: 0;
+            transform: translateY(20px);
+            transition: all 0.3s ease;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.5);
+        }
+
+        .toast.active {
+            opacity: 1;
+            transform: translateY(0);
+        }
+
+        .toast i {
+            color: var(--accent);
+            font-size: 20px;
+        }
+
+        /* No results */
+        .no-results {
+            text-align: center;
+            padding: 60px 20px;
+            color: var(--gray);
+        }
+
+        .no-results i {
+            font-size: 4rem;
+            margin-bottom: 20px;
+            opacity: 0.3;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .ideas-grid {
+                grid-template-columns: 1fr;
+            }
+            .idea-stats {
+                grid-template-columns: repeat(3, 1fr);
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="bg-animation"></div>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <a href="{% url 'home' %}" class="logo">
+            <div class="logo-icon">
+                <i class="fas fa-rocket"></i>
+            </div>
+            <span>ValidateAI</span>
+        </a>
+        <a href="{% url 'home' %}" class="back-btn">
+            <i class="fas fa-arrow-left"></i>
+            <span>Back to Home</span>
+        </a>
+    </nav>
+
+    <!-- Hero -->
+    <section class="hero">
+        <div class="hero-badge">
+            <i class="fas fa-lightbulb"></i>
+            <span>AI-Generated Startup Ideas</span>
+        </div>
+        <h1>
+            Explore <span class="gradient-text">AI-Powered</span><br>
+            Startup Ideas
+        </h1>
+        <p>Browse our curated collection of validated, AI-enhanced startup ideas across multiple industries. Get inspired and see what makes each idea unique.</p>
+    </section>
+
+    <!-- Search & Filter -->
+    <section class="search-filter-section">
+        <div class="search-box">
+            <i class="fas fa-search"></i>
+            <input type="text" id="searchInput" placeholder="Search startup ideas by name, industry, or feature...">
+        </div>
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">
+                <i class="fas fa-th"></i> All
+            </button>
+            <button class="filter-btn" data-filter="health">
+                <i class="fas fa-heartbeat"></i> Health
+            </button>
+            <button class="filter-btn" data-filter="finance">
+                <i class="fas fa-chart-line"></i> Finance
+            </button>
+            <button class="filter-btn" data-filter="education">
+                <i class="fas fa-graduation-cap"></i> Education
+            </button>
+            <button class="filter-btn" data-filter="ecommerce">
+                <i class="fas fa-shopping-cart"></i> E-Commerce
+            </button>
+            <button class="filter-btn" data-filter="productivity">
+                <i class="fas fa-bolt"></i> Productivity
+            </button>
+        </div>
+    </section>
+
+    <!-- Ideas Grid -->
+    <section class="ideas-section">
+        <h2 class="section-title">
+            <i class="fas fa-fire" style="color: var(--secondary);"></i>
+            Trending Startup Ideas
+        </h2>
+        <div class="ideas-grid" id="ideasGrid">
+            <!-- Cards will be inserted by JavaScript -->
+        </div>
+    </section>
+
+    <!-- Modal -->
+    <div class="modal" id="ideaModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <button class="close-modal" onclick="closeModal()">
+                    <i class="fas fa-times"></i>
+                </button>
+                <div id="modalHeader"></div>
+            </div>
+            <div class="modal-body" id="modalBody"></div>
+            <div class="modal-footer">
+                <button class="modal-btn secondary" onclick="closeModal()">Close</button>
+                <button class="modal-btn primary" onclick="validateIdea()">
+                    <i class="fas fa-rocket"></i> Validate This Idea
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Toast -->
+    <div class="toast" id="toast">
+        <i class="fas fa-check-circle"></i>
+        <span id="toastMsg">Action completed!</span>
+    </div>
+
+    <script>
+        // Startup Ideas Database
+        const startupIdeas = [
+            {
+                id: 1,
+                title: "AI Health Coach Pro",
+                category: "health",
+                categoryName: "HealthTech",
+                icon: "fa-heartbeat",
+                description: "Personalized AI-powered health coaching platform that creates custom fitness and nutrition plans based on user's biometric data, lifestyle, and goals.",
+                market: "$15.2B",
+                growth: "+23%",
+                users: "8.5K",
+                features: ["Biometric Tracking", "AI Meal Plans", "24/7 Coach", "Wearable Sync", "Sleep Analysis"],
+                problem: "People struggle to maintain healthy habits without personalized guidance. Generic fitness apps don't adapt to individual needs and lack real-time coaching.",
+                solution: "An AI coach that learns from your body data, creates hyper-personalized plans, and provides real-time motivation through conversational AI.",
+                aiAdvantage: "Machine learning models process biometric data to predict health risks, optimize workout timing, and adapt nutrition based on hormonal cycles and sleep patterns.",
+                targetMarket: "Health-conscious millennials and Gen-Z professionals aged 25-45 with disposable income for premium wellness services.",
+                revenueModel: "Subscription tiers: $19.99/month (Basic), $39.99/month (Pro with nutritionist), $99.99/month (Elite with human coach + AI)",
+                validationScore: 92,
+                likes: 245
+            },
+            {
+                id: 2,
+                title: "SmartInvest AI",
+                category: "finance",
+                categoryName: "FinTech",
+                icon: "fa-chart-line",
+                description: "AI-driven investment platform that analyzes market trends, predicts stock movements, and provides personalized portfolio recommendations for retail investors.",
+                market: "$8.7B",
+                growth: "+18%",
+                users: "12.3K",
+                features: ["Real-time Analysis", "Risk Prediction", "Auto-Portfolio", "Tax Optimization", "Sentiment AI"],
+                problem: "Retail investors lack access to institutional-grade analysis tools. Most rely on social media tips, leading to poor investment decisions and significant losses.",
+                solution: "Democratize Wall Street-level analysis using AI that processes millions of data points, news, and social sentiment to recommend optimal investments.",
+                aiAdvantage: "Natural Language Processing analyzes earnings calls, news, and social media to gauge market sentiment. Deep learning models predict price movements with 73% accuracy.",
+                targetMarket: "Millennial and Gen-Z retail investors aged 22-40 with $5K-$500K in investable assets seeking data-driven investment decisions.",
+                revenueModel: "Freemium model: Free basic features, $29/month Premium, $99/month Pro with unlimited AI insights and tax-loss harvesting.",
+                validationScore: 88,
+                likes: 312
+            },
+            {
+                id: 3,
+                title: "EduGenius AI Tutor",
+                category: "education",
+                categoryName: "EdTech",
+                icon: "fa-graduation-cap",
+                description: "Adaptive learning platform using AI to create personalized curricula, generate custom quizzes, and provide one-on-one tutoring for K-12 and college students.",
+                market: "$12.5B",
+                growth: "+31%",
+                users: "25K",
+                features: ["Adaptive Learning", "Custom Quizzes", "24/7 AI Tutor", "Progress Tracking", "Multi-language"],
+                problem: "Traditional education follows a one-size-fits-all approach. Students learn at different paces but classrooms can't accommodate individual needs, leading to gaps in understanding.",
+                solution: "An AI tutor that adapts to each student's learning style, pace, and knowledge gaps, providing personalized explanations and unlimited practice.",
+                aiAdvantage: "GPT-powered tutoring with subject-matter expertise, computer vision for handwritten homework analysis, and reinforcement learning to optimize teaching methods.",
+                targetMarket: "K-12 students, college students, and adult learners seeking supplementary education, especially parents looking for after-school academic support.",
+                revenueModel: "$14.99/month per student, $99.99/year family plan (up to 4 students), school district licensing at $50/student/year.",
+                validationScore: 95,
+                likes: 487
+            },
+            {
+                id: 4,
+                title: "ShopSmart AI",
+                category: "ecommerce",
+                categoryName: "E-Commerce",
+                icon: "fa-shopping-cart",
+                description: "AI shopping assistant that finds the best deals, compares prices across platforms, predicts future prices, and provides personalized product recommendations.",
+                market: "$6.8B",
+                growth: "+27%",
+                users: "15.6K",
+                features: ["Price Prediction", "Deal Alerts", "Visual Search", "Smart Compare", "Cashback AI"],
+                problem: "Online shoppers waste hours comparing prices across sites, miss the best deals, and often overpay. Manual comparison is time-consuming and inefficient.",
+                solution: "An AI shopping copilot that does the comparison work automatically, predicts future prices using historical data, and alerts you when items go on sale.",
+                aiAdvantage: "Computer vision identifies products from photos, NLP extracts features from reviews, and time-series forecasting predicts optimal buying times with 89% accuracy.",
+                targetMarket: "Online shoppers aged 18-55 who buy electronics, fashion, and home goods, seeking to save money and time on purchases over $50.",
+                revenueModel: "Free basic features, $9.99/month Premium for advanced alerts, affiliate commissions (3-8%) on redirected purchases, B2B API access.",
+                validationScore: 87,
+                likes: 198
+            },
+            {
+                id: 5,
+                title: "MindFlow AI",
+                category: "productivity",
+                categoryName: "Productivity",
+                icon: "fa-brain",
+                description: "AI-powered productivity suite that automatically schedules tasks, prioritizes work, summarizes meetings, and generates actionable insights from your workflow.",
+                market: "$4.2B",
+                growth: "+34%",
+                users: "9.8K",
+                features: ["Smart Scheduling", "Meeting AI", "Task Priority", "Auto Summary", "Focus Mode"],
+                problem: "Knowledge workers spend 60% of their time on coordination, scheduling, and admin tasks instead of deep work. Information overload leads to burnout and decreased productivity.",
+                solution: "An AI executive assistant that handles scheduling, prioritizes tasks based on deadlines and importance, summarizes meetings, and protects your focus time.",
+                aiAdvantage: "GPT-4 powered meeting summarization, reinforcement learning for task prioritization, and integration with calendar/email for seamless workflow optimization.",
+                targetMarket: "Remote workers, managers, and executives at tech companies and startups who struggle with information overload and want to reclaim 2+ hours daily.",
+                revenueModel: "Freemium: Free for individuals (basic features), $15/month Pro, $25/month Teams, $50/month Enterprise with advanced analytics and admin controls.",
+                validationScore: 91,
+                likes: 276
+            },
+            {
+                id: 6,
+                title: "LegalBot AI",
+                category: "productivity",
+                categoryName: "LegalTech",
+                icon: "fa-gavel",
+                description: "AI legal assistant that reviews contracts, identifies risks, generates legal documents, and provides instant answers to common legal questions for small businesses.",
+                market: "$3.5B",
+                growth: "+29%",
+                users: "6.2K",
+                features: ["Contract Review", "Risk Detection", "Doc Generator", "Legal Q&A", "Compliance AI"],
+                problem: "Small businesses and freelancers can't afford $300/hour lawyers for routine legal work, leading to poorly drafted contracts and legal vulnerabilities.",
+                solution: "An AI legal assistant trained on millions of legal documents that handles 80% of routine legal tasks for 1% of the cost of a lawyer.",
+                aiAdvantage: "Fine-tuned LLM on legal corpus, named entity recognition for clause extraction, and risk assessment models trained on case law outcomes.",
+                targetMarket: "Small business owners, startups, freelancers, and solopreneurs who need affordable legal document review and generation without hiring a lawyer.",
+                revenueModel: "$49/month for individuals, $199/month for small businesses, $999/month for law firms using as productivity tool, pay-per-document option at $29.",
+                validationScore: 89,
+                likes: 165
+            }
+        ];
+
+        let likedIdeas = new Set();
+
+        // Render ideas
+        function renderIdeas(ideas) {
+            const grid = document.getElementById('ideasGrid');
+            
+            if (ideas.length === 0) {
+                grid.innerHTML = `
+                    <div class="no-results" style="grid-column: 1/-1;">
+                        <i class="fas fa-search"></i>
+                        <h3>No ideas found</h3>
+                        <p>Try adjusting your search or filter</p>
+                    </div>
+                `;
+                return;
+            }
+
+            grid.innerHTML = ideas.map(idea => `
+                <div class="idea-card" data-category="${idea.category}">
+                    <div class="idea-header">
+                        <div class="idea-icon">
+                            <i class="fas ${idea.icon}"></i>
+                        </div>
+                        <div class="idea-title-section">
+                            <h3 class="idea-title">${idea.title}</h3>
+                            <span class="idea-category ${idea.category}">${idea.categoryName}</span>
+                        </div>
+                    </div>
+                    <p class="idea-description">${idea.description}</p>
+                    <div class="idea-stats">
+                        <div class="stat">
+                            <div class="stat-value">${idea.market}</div>
+                            <div class="stat-label">Market Size</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${idea.growth}</div>
+                            <div class="stat-label">Growth</div>
+                        </div>
+                        <div class="stat">
+                            <div class="stat-value">${idea.users}</div>
+                            <div class="stat-label">Users</div>
+                        </div>
+                    </div>
+                    <div class="idea-features">
+                        ${idea.features.map(f => `<span class="feature-tag">${f}</span>`).join('')}
+                    </div>
+                    <div class="idea-footer">
+                        <button class="view-btn" onclick="openModal(${idea.id})">
+                            <i class="fas fa-eye"></i> View Details
+                        </button>
+                        <button class="like-btn ${likedIdeas.has(idea.id) ? 'liked' : ''}" 
+                                onclick="toggleLike(${idea.id}, this)">
+                            <i class="fas fa-heart"></i>
+                        </button>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        // Open modal
+        function openModal(id) {
+            const idea = startupIdeas.find(i => i.id === id);
+            if (!idea) return;
+
+            document.getElementById('modalHeader').innerHTML = `
+                <div class="idea-header">
+                    <div class="idea-icon">
+                        <i class="fas ${idea.icon}"></i>
+                    </div>
+                    <div class="idea-title-section">
+                        <h2 class="idea-title">${idea.title}</h2>
+                        <span class="idea-category ${idea.category}">${idea.categoryName}</span>
+                    </div>
+                </div>
+            `;
+
+            document.getElementById('modalBody').innerHTML = `
+                <div class="validation-score">
+                    <div class="score-circle">${idea.validationScore}</div>
+                    <div class="score-info">
+                        <h4>AI Validation Score</h4>
+                        <p>Based on market analysis, technical feasibility, and growth potential</p>
+                    </div>
+                </div>
+
+                <div class="modal-section">
+                    <h3><i class="fas fa-exclamation-circle"></i> Problem</h3>
+                    <p>${idea.problem}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3><i class="fas fa-lightbulb"></i> Solution</h3>
+                    <p>${idea.solution}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3><i class="fas fa-robot"></i> AI Advantage</h3>
+                    <p>${idea.aiAdvantage}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3><i class="fas fa-bullseye"></i> Target Market</h3>
+                    <p>${idea.targetMarket}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3><i class="fas fa-dollar-sign"></i> Revenue Model</h3>
+                    <p>${idea.revenueModel}</p>
+                </div>
+
+                <div class="modal-section">
+                    <h3><i class="fas fa-star"></i> Key Features</h3>
+                    <ul>
+                        ${idea.features.map(f => `<li>${f}</li>`).join('')}
+                    </ul>
+                </div>
+            `;
+
+            document.getElementById('ideaModal').classList.add('active');
+        }
+
+        // Close modal
+        function closeModal() {
+            document.getElementById('ideaModal').classList.remove('active');
+        }
+
+        // Validate idea
+        function validateIdea() {
+            closeModal();
+            showToast('Redirecting to validation page...');
+            setTimeout(() => {
+                window.location.href = '/register/';
+            }, 1500);
+        }
+
+        // Toggle like
+        function toggleLike(id, btn) {
+            if (likedIdeas.has(id)) {
+                likedIdeas.delete(id);
+                btn.classList.remove('liked');
+                showToast('Removed from favorites');
+            } else {
+                likedIdeas.add(id);
+                btn.classList.add('liked');
+                showToast('Added to favorites! ❤️');
+            }
+        }
+
+        // Show toast
+        function showToast(msg) {
+            const toast = document.getElementById('toast');
+            document.getElementById('toastMsg').textContent = msg;
+            toast.classList.add('active');
+            setTimeout(() => toast.classList.remove('active'), 2500);
+        }
+
+        // Filter functionality
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+                const filter = this.dataset.filter;
+                
+                let filtered = filter === 'all' 
+                    ? startupIdeas 
+                    : startupIdeas.filter(i => i.category === filter);
+                
+                const searchTerm = document.getElementById('searchInput').value.toLowerCase();
+                if (searchTerm) {
+                    filtered = filtered.filter(i => 
+                        i.title.toLowerCase().includes(searchTerm) ||
+                        i.description.toLowerCase().includes(searchTerm) ||
+                        i.features.some(f => f.toLowerCase().includes(searchTerm))
+                    );
+                }
+                
+                renderIdeas(filtered);
+            });
+        });
+
+        // Search functionality
+        document.getElementById('searchInput').addEventListener('input', function() {
+            const term = this.value.toLowerCase();
+            const activeFilter = document.querySelector('.filter-btn.active').dataset.filter;
+            
+            let filtered = activeFilter === 'all' 
+                ? startupIdeas 
+                : startupIdeas.filter(i => i.category === activeFilter);
+            
+            if (term) {
+                filtered = filtered.filter(i => 
+                    i.title.toLowerCase().includes(term) ||
+                    i.description.toLowerCase().includes(term) ||
+                    i.features.some(f => f.toLowerCase().includes(term)) ||
+                    i.categoryName.toLowerCase().includes(term)
+                );
+            }
+            
+            renderIdeas(filtered);
+        });
+
+        // Close modal on outside click
+        document.getElementById('ideaModal').addEventListener('click', function(e) {
+            if (e.target === this) closeModal();
+        });
+
+        // ESC to close modal
+        document.addEventListener('keydown', function(e) {
+            if (e.key === 'Escape') closeModal();
+        });
+
+        // Initial render
+        renderIdeas(startupIdeas);
+    </script>
+</body>
+</html>

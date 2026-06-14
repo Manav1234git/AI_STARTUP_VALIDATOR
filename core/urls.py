@@ -1,7 +1,10 @@
+# core/urls.py
 from django.urls import path
-from .views import home,about
-#urls
+from . import views
+
 urlpatterns = [
-    path('', home, name='home'),
-    path('about/', about),
+    path('', views.home, name='home'),      # index page
+    path('about/', views.about, name='about'),#about page
+    path('demo/', views.demo, name='demo'),  #demo page
+
 ]

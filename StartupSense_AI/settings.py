@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/6.0/ref/settings/
 """
 
 from pathlib import Path
+from dotenv import load_dotenv
+import os
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,16 +40,27 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
+    
+
+    'django.contrib.sites',
+    'allauth',
+    'allauth.account',
+    'allauth.socialaccount',
+
+    # optional (only if using Google login)
+    'allauth.socialaccount.providers.google',
+
+
+
     'core.apps.CoreConfig',
     'users.apps.UsersConfig',
-    'validator.apps.ValidatorConfig',
-    'analysis.apps.AnalysisConfig',
     'reports.apps.ReportsConfig',
-    'dashboard.apps.DashboardConfig',
-    'api.apps.ApiConfig'
+    'dashboard.apps.DashboardConfig'
+   
 ]
 
 MIDDLEWARE = [
+  
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
@@ -55,7 +68,11 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+
+    'allauth.account.middleware.AccountMiddleware',
 ]
+# SESSION CONFIG
+SESSION_ENGINE = 'django.contrib.sessions.backends.db'
 
 ROOT_URLCONF = 'StartupSense_AI.urls'
 
@@ -66,6 +83,8 @@ TEMPLATES = [
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
+              
+                'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
@@ -122,5 +141,17 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/6.0/howto/static-files/
 
-STATIC_URL = 'static/'
-OPENAI_API_KEY = "your-api-key-here"
+STATIC_URL = '/static/'
+LOGIN_REDIRECT_URL = '/dashboard/'
+LOGOUT_REDIRECT_URL = '/users/login/'
+
+STATICFILES_DIRS = [
+    BASE_DIR / "static"
+]
+SITE_ID = 1
+
+SESSION_COOKIE_AGE = 1200
+SESSION_SAVE_EVERY_REQUEST = True
+
+BASE_DIR = Path(__file__).resolve().parent.parent
+load_dotenv(BASE_DIR / '.env', encoding='utf-8-sig')

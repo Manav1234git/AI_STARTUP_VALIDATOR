@@ -1,0 +1,139 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Settings</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+
+    <style>
+        body {
+            transition: all 0.3s ease;
+        }
+    </style>
+</head>
+
+<body id="body" class="bg-slate-950 text-white min-h-screen">
+
+<!-- TOP BAR -->
+<div class="flex justify-between items-center px-8 py-4 bg-slate-900 shadow-md">
+
+    <!-- Left -->
+    <h1 class="text-xl font-semibold text-indigo-400">Settings</h1>
+
+    <!-- Right -->
+    <div class="flex items-center gap-6">
+
+        <a href="/dashboard/" class="hover:text-indigo-400">Dashboard</a>
+       
+
+        <!-- DARK MODE TOGGLE -->
+        <div class="flex items-center gap-2">
+            <span class="text-sm text-slate-400">🌙</span>
+
+            <label class="relative inline-flex items-center cursor-pointer">
+                <input type="checkbox" id="themeToggle" class="sr-only peer">
+                
+                <div class="w-11 h-6 bg-slate-700 rounded-full peer 
+                    peer-checked:bg-indigo-500 
+                    after:content-[''] after:absolute after:top-[2px] after:left-[2px] 
+                    after:bg-white after:border after:rounded-full after:h-5 after:w-5 
+                    after:transition-all 
+                    peer-checked:after:translate-x-full">
+                </div>
+            </label>
+
+            <span class="text-sm text-slate-400">☀️</span>
+        </div>
+
+    </div>
+</div>
+
+<!-- MAIN CONTENT -->
+<div class="max-w-5xl mx-auto mt-10 p-6 space-y-8">
+
+    <!-- ACCOUNT -->
+    <div class="bg-slate-900 p-6 rounded-2xl shadow-md">
+        <h2 class="text-lg font-semibold text-indigo-400 mb-4">Account Settings</h2>
+
+        <div class="space-y-4">
+            <input type="text" value="{{ user.username }}" class="w-full p-3 rounded-lg bg-slate-800">
+            <input type="email" value="{{ user.email }}" class="w-full p-3 rounded-lg bg-slate-800">
+
+            <button class="bg-indigo-500 px-5 py-2 rounded-lg hover:bg-indigo-600">
+                Update
+            </button>
+        </div>
+    </div>
+
+    <!-- NOTIFICATIONS -->
+    <div class="bg-slate-900 p-6 rounded-2xl shadow-md">
+        <h2 class="text-lg font-semibold text-blue-400 mb-4">Notifications</h2>
+
+        <div class="flex justify-between items-center">
+            <span>Email Notifications</span>
+            <input type="checkbox" checked>
+        </div>
+
+        <div class="flex justify-between items-center mt-3">
+            <span>Push Notifications</span>
+            <input type="checkbox">
+        </div>
+    </div>
+
+    <!-- STARTUP SETTINGS -->
+    <div class="bg-slate-900 p-6 rounded-2xl shadow-md">
+        <h2 class="text-lg font-semibold text-green-400 mb-4">Startup Validator</h2>
+
+        <div class="space-y-4">
+            <select class="w-full p-3 rounded-lg bg-slate-800">
+                <option>Technology</option>
+                <option>Finance</option>
+                <option>Healthcare</option>
+            </select>
+
+            <select class="w-full p-3 rounded-lg bg-slate-800">
+                <option>Low Risk</option>
+                <option>Medium Risk</option>
+                <option>High Risk</option>
+            </select>
+
+            <label class="flex justify-between items-center">
+                Enable AI Suggestions
+                <input type="checkbox" checked>
+            </label>
+        </div>
+    </div>
+
+</div>
+
+<!-- SCRIPT -->
+<script>
+const toggle = document.getElementById("themeToggle");
+const body = document.getElementById("body");
+
+// Load saved mode
+if(localStorage.getItem("theme") === "light"){
+    body.classList.remove("bg-slate-950","text-white");
+    body.classList.add("bg-white","text-black");
+    toggle.checked = true;
+}
+
+// Toggle function
+toggle.addEventListener("change", () => {
+    if(toggle.checked){
+        body.classList.remove("bg-slate-950","text-white");
+        body.classList.add("bg-white","text-black");
+        localStorage.setItem("theme","light");
+    } else {
+        body.classList.remove("bg-white","text-black");
+        body.classList.add("bg-slate-950","text-white");
+        localStorage.setItem("theme","dark");
+    }
+});
+</script>
+
+</body>
+</html>
+
